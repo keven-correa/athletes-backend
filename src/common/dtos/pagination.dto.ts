@@ -8,6 +8,7 @@ export class PaginationDto {
     @Type(() => Number)
     limit?: number;
 
+    //skip data
     @IsOptional()
     @Min(0)
     @Type(() => Number)
