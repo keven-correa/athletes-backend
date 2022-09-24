@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, HttpCode, HttpStatus, Query } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, HttpCode, HttpStatus, Query, ParseIntPipe } from '@nestjs/common';
 import { PaginationDto } from '../common/dtos/pagination.dto';
 import { AthletesService } from './athletes.service';
 import { CreateAthleteDto } from './dto/create-athlete.dto';
@@ -15,22 +15,26 @@ export class AthleteController {
   }
 
   @Get()
+  @HttpCode(HttpStatus.OK)
   findAll(@Query() paginationDto: PaginationDto) {
     return this.athletesService.findAll(paginationDto);
   }
 
   @Get(':id')
-  findOne(@Param('id') id: number) {
+  @HttpCode(HttpStatus.OK)
+  findOne(@Param('id', ParseIntPipe) id: number) {
     return this.athletesService.findOne(id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: number, @Body() updateAthleteDto: UpdateAthleteDto) {
+  @HttpCode(HttpStatus.OK)
+  update(@Param('id', ParseIntPipe) id: number, @Body() updateAthleteDto: UpdateAthleteDto) {
     return this.athletesService.update(id, updateAthleteDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: number) {
+  @HttpCode(HttpStatus.NO_CONTENT)
+  remove(@Param('id', ParseIntPipe) id: number) {
     return this.athletesService.remove(id);
   }
 }
