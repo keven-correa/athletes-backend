@@ -8,6 +8,7 @@ import { ModalityModule } from './modality/modality.module';
 import { DoctorModule } from './doctor/doctor.module';
 import { AppointmentModule } from './appointment/appointment.module';
 import { TherapyModule } from './therapy/therapy.module';
+import { EvaluationModule } from './evaluation/evaluation.module';
 
 @Module({
   imports: [
@@ -29,6 +30,7 @@ import { TherapyModule } from './therapy/therapy.module';
     DoctorModule,
     AppointmentModule,
     TherapyModule,
+    EvaluationModule,
   ],
   controllers: [],
   providers: [],

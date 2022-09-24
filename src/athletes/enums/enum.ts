@@ -1,21 +1,21 @@
 export enum MaritalStatus {
-    Single = 1,
-    Married,
-    Divorced,
-    Widowed
+    Single = 'Soltero',
+    Married = 'Casado',
+    Divorced = 'Divorciado',
+    Widowed = 'Viudo'
 }
 
 export enum PatientType {
-    Athlete = 1,
-    Trainer,
-    Employee,
-    External
+    Athlete = 'Atleta',
+    Trainer = 'Entrenador',
+    Employee = 'Empleado',
+    External = 'Externo'
 }
 
 export enum LevelOfSchooling {
-    Basic,
-    Medium,
-    University
+    Basic = 'Basico',
+    Medium = 'Medio',
+    University = 'Universitario'
 }
 
 export enum BloodType {

@@ -3,6 +3,7 @@ import {Modality} from '../../modality/entities/modality.entity'
 import { Column, Entity, JoinColumn, OneToMany, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { BloodType, LevelOfSchooling, MaritalStatus, PatientType } from '../enums/enum';
 import { Therapy } from '../../therapy/entities/therapy.entity';
+import { Evaluation } from '../../evaluation/entities/evaluation.entity';
 
 @Entity('Athletes')
 export class Athlete {
@@ -27,10 +28,10 @@ export class Athlete {
   @Column('int')
   maritalStatus: MaritalStatus;
 
-  @Column('int')
+  @Column({type: 'enum'})
   patientType: PatientType;
 
-  @Column('int')
+  @Column({type: 'enum'})
   levelOfSchooling: LevelOfSchooling;
 
   @Column('text')
@@ -42,7 +43,7 @@ export class Athlete {
   @Column('varchar')
   phone: string;
 
-  @Column('int')
+  @Column({type: 'enum'})
   bloodType: BloodType;
 
   @Column('float')
@@ -59,9 +60,15 @@ export class Athlete {
 
   @OneToMany(
     () => Therapy,
-    (athleteTherapy) => athleteTherapy
+    (athleteTherapy) => athleteTherapy.athlete
   )
-  therapies?: Therapy[]
+  therapies?: Therapy[];
+
+  @OneToMany(
+    () => Evaluation,
+    (athleteEvaluation) => athleteEvaluation.athlete
+  )
+  evaluations?: Evaluation[];
 
   @OneToOne(() => Modality)
   @JoinColumn()
