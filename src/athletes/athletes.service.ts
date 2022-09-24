@@ -10,16 +10,17 @@ import { PaginationDto } from '../common/dtos/pagination.dto';
 import { Repository } from 'typeorm';
 import { CreateAthleteDto } from './dto/create-athlete.dto';
 import { UpdateAthleteDto } from './dto/update-athlete.dto';
-import { Athletes } from './entities/athlete.entity';
+import { Athlete } from './entities/athlete.entity';
 import { validate as isUUID } from 'uuid';
+import { isInt } from 'class-validator';
 
 @Injectable()
 export class AthletesService {
   private readonly logger = new Logger('AthleteService');
 
   constructor(
-    @InjectRepository(Athletes)
-    private readonly athleteRepository: Repository<Athletes>,
+    @InjectRepository(Athlete)
+    private readonly athleteRepository: Repository<Athlete>,
   ) {}
 
   async create(createAthleteDto: CreateAthleteDto) {
@@ -39,30 +40,39 @@ export class AthletesService {
       skip: offset,
     });
   }
-
-  async findOne(searchParam: string) {
-    let athlete: Athletes;
-    if (isUUID(searchParam)) {
-      athlete = await this.athleteRepository.findOneBy({ id: searchParam });
-    } else {
-      const queryBuilder = this.athleteRepository.createQueryBuilder();
-      athlete = await queryBuilder
-        .where('UPPER(name) =:name or document =:document', {
-          name: searchParam.toUpperCase(),
-          document: searchParam,
-        })
-        .getOne();
-    }
-
+  async findOne(id: number){
+    let athlete: Athlete;
+    athlete = await this.athleteRepository.findOneBy({id: id});
     if (!athlete) {
       throw new NotFoundException(
-        `The Athlete with search term ${searchParam} not found or dosen't exist.`,
+        `The Athlete with id: ${id} not found or dosen't exist.`,
       );
     }
     return athlete;
   }
+  // async findOne(searchParam: string | number) {
+  //   let athlete: Athletes;
+  //   if (isInt(searchParam)) {
+  //     athlete = await this.athleteRepository.findOneBy({ id: searchParam });
+  //   } else {
+  //     const queryBuilder = this.athleteRepository.createQueryBuilder();
+  //     athlete = await queryBuilder
+  //       .where('UPPER(name) =:name or document =:document', {
+  //         name: searchParam.toUpperCase(),
+  //         document: searchParam,
+  //       })
+  //       .getOne();
+  //   }
 
-  async update(id: string, updateAthleteDto: UpdateAthleteDto) {
+  //   if (!athlete) {
+  //     throw new NotFoundException(
+  //       `The Athlete with search term ${searchParam} not found or dosen't exist.`,
+  //     );
+  //   }
+  //   return athlete;
+  // }
+
+  async update(id: number, updateAthleteDto: UpdateAthleteDto) {
     const athlete = await this.athleteRepository.preload({
       id: id,
       ...updateAthleteDto,
@@ -78,7 +88,7 @@ export class AthletesService {
     }
   }
 
-  async remove(id: string) {
+  async remove(id: number) {
     const athleteExists = this.findOne(id);
     if (!athleteExists)
       throw new NotFoundException(`The athlete with id: ${id} not found.`);

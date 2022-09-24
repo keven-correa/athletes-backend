@@ -20,17 +20,17 @@ export class AthleteController {
   }
 
   @Get(':id')
-  findOne(@Param('id') searchParam: string) {
-    return this.athletesService.findOne(searchParam);
+  findOne(@Param('id') id: number) {
+    return this.athletesService.findOne(id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateAthleteDto: UpdateAthleteDto) {
+  update(@Param('id') id: number, @Body() updateAthleteDto: UpdateAthleteDto) {
     return this.athletesService.update(id, updateAthleteDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
+  remove(@Param('id') id: number) {
     return this.athletesService.remove(id);
   }
 }

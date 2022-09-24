@@ -1,10 +1,13 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Appointment } from '../../appointment/entities/appointment.entity';
+import {Modality} from '../../modality/entities/modality.entity'
+import { Column, Entity, JoinColumn, OneToMany, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { BloodType, LevelOfSchooling, MaritalStatus, PatientType } from '../enums/enum';
+import { Therapy } from '../../therapy/entities/therapy.entity';
 
-@Entity()
-export class Athletes {
-  @PrimaryGeneratedColumn('uuid')
-  id: string;
+@Entity('Athletes')
+export class Athlete {
+  @PrimaryGeneratedColumn('increment')
+  id: number;
 
   @Column('varchar')
   name: string;
@@ -47,4 +50,20 @@ export class Athletes {
 
   @Column('float')
   height: number
+
+  @OneToMany(
+    () => Appointment,
+    (athleteAppointment) => athleteAppointment.athlete
+  )
+  appointments?: Appointment[]
+
+  @OneToMany(
+    () => Therapy,
+    (athleteTherapy) => athleteTherapy
+  )
+  therapies?: Therapy[]
+
+  @OneToOne(() => Modality)
+  @JoinColumn()
+  modality: Modality
 }
