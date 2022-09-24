@@ -1,7 +1,8 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, ParseIntPipe, Query } from '@nestjs/common';
 import { ModalityService } from './modality.service';
 import { CreateModalityDto } from './dto/create-modality.dto';
 import { UpdateModalityDto } from './dto/update-modality.dto';
+import { PaginationDto } from 'src/common/dtos/pagination.dto';
 
 @Controller('modality')
 export class ModalityController {
@@ -13,22 +14,22 @@ export class ModalityController {
   }
 
   @Get()
-  findAll() {
-    return this.modalityService.findAll();
+  findAll(@Query() paginationDto: PaginationDto) {
+    return this.modalityService.findAll(paginationDto);
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.modalityService.findOne(+id);
+  findOne(@Param('id', ParseIntPipe) id: number) {
+    return this.modalityService.findOne(id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateModalityDto: UpdateModalityDto) {
-    return this.modalityService.update(+id, updateModalityDto);
+  update(@Param('id', ParseIntPipe) id: number, @Body() updateModalityDto: UpdateModalityDto) {
+    return this.modalityService.update(id, updateModalityDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.modalityService.remove(+id);
+  remove(@Param('id', ParseIntPipe) id: number) {
+    return this.modalityService.remove(id);
   }
 }
