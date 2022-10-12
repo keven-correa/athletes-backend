@@ -1,9 +1,9 @@
 import { Appointment } from '../../appointment/entities/appointment.entity';
-import { Modality } from '../../modality/entities/modality.entity';
 import {
   Column,
   Entity,
   JoinColumn,
+  ManyToOne,
   OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
@@ -16,6 +16,7 @@ import {
 } from '../enums/enum';
 import { Therapy } from '../../therapy/entities/therapy.entity';
 import { Evaluation } from '../../evaluation/entities/evaluation.entity';
+import { Discipline } from '../../discipline/entities/discipline.entity';
 
 @Entity('Athletes')
 export class Athlete {
@@ -37,13 +38,13 @@ export class Athlete {
   @Column()
   dateOfBirth: Date;
 
-  @Column('int')
+  @Column({type: 'enum', enum: MaritalStatus})
   maritalStatus: MaritalStatus;
 
-  @Column({ type: 'enum' })
+  @Column({ type: 'enum', enum: PatientType })
   patientType: PatientType;
 
-  @Column({ type: 'enum' })
+  @Column({ type: 'enum', enum: LevelOfSchooling })
   levelOfSchooling: LevelOfSchooling;
 
   @Column('text')
@@ -55,7 +56,7 @@ export class Athlete {
   @Column('varchar')
   phone: string;
 
-  @Column({ type: 'enum' })
+  @Column({ type: 'enum', enum: BloodType })
   bloodType: BloodType;
 
   @Column('float')
@@ -76,7 +77,8 @@ export class Athlete {
   @OneToMany(() => Evaluation, (athleteEvaluation) => athleteEvaluation.athlete)
   evaluations?: Evaluation[];
 
-  @OneToOne(() => Modality)
-  @JoinColumn()
-  modality: Modality;
+  // @OneToMany(() => Discipline, (athleteDiscipline) => athleteDiscipline.athlete)
+  // @ManyToOne(() => Athlete, (athlete) => athlete.discipline)
+  @ManyToOne(() => Discipline, (discipline) => discipline.athletes)
+  discipline: Discipline;
 }

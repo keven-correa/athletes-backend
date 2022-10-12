@@ -50,4 +50,7 @@ export class CreateAthleteDto {
 
   @IsNotEmpty()
   height: number
+
+  @IsNotEmpty()
+  disciplineId: number;
 }

@@ -1,17 +1,20 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, HttpCode, HttpStatus, Query, ParseIntPipe } from '@nestjs/common';
+import { DisciplineService } from '../discipline/discipline.service';
 import { PaginationDto } from '../common/dtos/pagination.dto';
 import { AthletesService } from './athletes.service';
 import { CreateAthleteDto } from './dto/create-athlete.dto';
 import { UpdateAthleteDto } from './dto/update-athlete.dto';
+import { Discipline } from '../discipline/entities/discipline.entity';
 
 @Controller('athletes')
 export class AthleteController {
-  constructor(private readonly athletesService: AthletesService) {}
+  constructor(private readonly athletesService: AthletesService, private disciplineService: DisciplineService) {}
 
   @Post()
   @HttpCode(HttpStatus.CREATED)
-  create(@Body() createAthleteDto: CreateAthleteDto) {
-    return this.athletesService.create(createAthleteDto);
+  async create(@Body() createAthleteDto: CreateAthleteDto) {
+    const getDiscipline = await this.disciplineService.findOne(createAthleteDto.disciplineId);
+    return await this.athletesService.create(createAthleteDto, getDiscipline);
   }
 
   @Get()

@@ -13,6 +13,7 @@ import { UpdateAthleteDto } from './dto/update-athlete.dto';
 import { Athlete } from './entities/athlete.entity';
 import { validate as isUUID } from 'uuid';
 import { isInt } from 'class-validator';
+import { Discipline } from '../discipline/entities/discipline.entity';
 
 @Injectable()
 export class AthletesService {
@@ -23,11 +24,14 @@ export class AthletesService {
     private readonly athleteRepository: Repository<Athlete>,
   ) {}
 
-  async create(createAthleteDto: CreateAthleteDto) {
+  async create(createAthleteDto: CreateAthleteDto, disciplineParam: Discipline) {
     try {
-      const athlete = this.athleteRepository.create(createAthleteDto);
-      await this.athleteRepository.save(athlete);
-      return athlete;
+      const newAthlete = this.athleteRepository.create({
+        ...createAthleteDto,
+        discipline: disciplineParam,
+      });
+      await this.athleteRepository.save(newAthlete);
+      return newAthlete;
     } catch (error) {
       this.handleDbException(error);
     }
@@ -38,11 +42,13 @@ export class AthletesService {
     return await this.athleteRepository.find({
       take: limit,
       skip: offset,
+      relations: ['discipline'],
+      loadEagerRelations: true
     });
   }
-  async findOne(id: number){
+  async findOne(id: number) {
     let athlete: Athlete;
-    athlete = await this.athleteRepository.findOneBy({id: id});
+    athlete = await this.athleteRepository.findOneBy({ id: id });
     if (!athlete) {
       throw new NotFoundException(
         `The Athlete with id: ${id} not found or dosen't exist.`,

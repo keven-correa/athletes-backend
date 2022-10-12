@@ -4,11 +4,12 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AthleteModule } from './athletes/athletes.module';
 import { CommonModule } from './common/common.module';
 import { AuthModule } from './auth/auth.module';
-import { ModalityModule } from './modality/modality.module';
 import { DoctorModule } from './doctor/doctor.module';
 import { AppointmentModule } from './appointment/appointment.module';
 import { TherapyModule } from './therapy/therapy.module';
 import { EvaluationModule } from './evaluation/evaluation.module';
+import { DisciplineModule } from './discipline/discipline.module';
+import { DisciplineService } from './discipline/discipline.service';
 
 @Module({
   imports: [
@@ -21,18 +22,18 @@ import { EvaluationModule } from './evaluation/evaluation.module';
       username: process.env.DB_USERNAME,
       password: process.env.DB_PASSWORD,
       autoLoadEntities: true,
-      synchronize: true
+      synchronize: true,
     }),
     AthleteModule,
     CommonModule,
     AuthModule,
-    ModalityModule,
     DoctorModule,
     AppointmentModule,
     TherapyModule,
     EvaluationModule,
+    DisciplineModule,
   ],
   controllers: [],
-  providers: [],
+  providers: [DisciplineService],
 })
 export class AppModule {}
