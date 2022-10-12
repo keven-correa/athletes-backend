@@ -30,6 +30,9 @@ export class AthletesService {
         ...createAthleteDto,
         discipline: disciplineParam,
       });
+      if(!newAthlete.discipline){
+        throw new BadRequestException()
+      }
       await this.athleteRepository.save(newAthlete);
       return newAthlete;
     } catch (error) {

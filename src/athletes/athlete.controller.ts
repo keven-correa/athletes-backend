@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, HttpCode, HttpStatus, Query, ParseIntPipe } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, HttpCode, HttpStatus, Query, ParseIntPipe, BadRequestException, NotFoundException } from '@nestjs/common';
 import { DisciplineService } from '../discipline/discipline.service';
 import { PaginationDto } from '../common/dtos/pagination.dto';
 import { AthletesService } from './athletes.service';
@@ -14,6 +14,9 @@ export class AthleteController {
   @HttpCode(HttpStatus.CREATED)
   async create(@Body() createAthleteDto: CreateAthleteDto) {
     const getDiscipline = await this.disciplineService.findOne(createAthleteDto.disciplineId);
+    if(!getDiscipline){
+      throw new NotFoundException(`The discipline with id: ${createAthleteDto.disciplineId} not exists!`)
+    }
     return await this.athletesService.create(createAthleteDto, getDiscipline);
   }
 
