@@ -22,16 +22,27 @@ export class AthletesService {
   constructor(
     @InjectRepository(Athlete)
     private readonly athleteRepository: Repository<Athlete>,
+    @InjectRepository(Discipline)
+    private readonly disciplineRepository: Repository<Discipline>,
   ) {}
 
-  async create(createAthleteDto: CreateAthleteDto, disciplineParam: Discipline) {
+  async create(createAthleteDto: CreateAthleteDto) {
+    //disciplineParam: Discipline
+    const getDiscipline = await this.disciplineRepository.findOne({
+      where: { id: createAthleteDto.disciplineId },
+    });
+    if (!getDiscipline) {
+      throw new NotFoundException(
+        `The Discipline with id: ${createAthleteDto.disciplineId} not found or dosen't exist.`,
+      );
+    }
     try {
       const newAthlete = this.athleteRepository.create({
         ...createAthleteDto,
-        discipline: disciplineParam,
+        discipline: getDiscipline,
       });
-      if(!newAthlete.discipline){
-        throw new BadRequestException()
+      if (!newAthlete.discipline) {
+        throw new BadRequestException();
       }
       await this.athleteRepository.save(newAthlete);
       return newAthlete;
@@ -46,7 +57,7 @@ export class AthletesService {
       take: limit,
       skip: offset,
       relations: ['discipline'],
-      loadEagerRelations: true
+      loadEagerRelations: true,
     });
   }
   async findOne(id: number) {
@@ -82,9 +93,18 @@ export class AthletesService {
   // }
 
   async update(id: number, updateAthleteDto: UpdateAthleteDto) {
+    const getDiscipline = await this.disciplineRepository.findOne({
+      where: { id: updateAthleteDto.disciplineId },
+    });
+    if (!getDiscipline) {
+      throw new NotFoundException(
+        `The Discipline with id: ${updateAthleteDto.disciplineId} not found or dosen't exist.`,
+      );
+    }
     const athlete = await this.athleteRepository.preload({
       id: id,
       ...updateAthleteDto,
+      discipline: getDiscipline
     });
     if (!athlete) {
       throw new NotFoundException(`The athlete with id: ${id} not found.`);
@@ -96,6 +116,13 @@ export class AthletesService {
       this.handleDbException(error);
     }
   }
+
+  // async modifyStatus(id: number){
+  //   const athleteExists = this.findOne(id);
+  //   if (!athleteExists)
+  //     throw new NotFoundException(`The athlete with id: ${id} not found.`);
+
+  // }
 
   async remove(id: number) {
     const athleteExists = this.findOne(id);

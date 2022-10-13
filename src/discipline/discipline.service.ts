@@ -29,8 +29,13 @@ export class DisciplineService {
     return await this.disciplineRepository.findOneBy({id: id});
   }
 
-  update(id: number, updateDisciplineDto: UpdateDisciplineDto) {
-    return `This action updates a #${id} discipline`;
+  async update(id: number, updateDisciplineDto: UpdateDisciplineDto) {
+    const discipline = await  this.disciplineRepository.preload({
+      id: id,
+      ...updateDisciplineDto
+    });
+
+    await this.disciplineRepository.save(discipline)
   }
 
   remove(id: number) {

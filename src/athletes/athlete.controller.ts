@@ -13,11 +13,7 @@ export class AthleteController {
   @Post()
   @HttpCode(HttpStatus.CREATED)
   async create(@Body() createAthleteDto: CreateAthleteDto) {
-    const getDiscipline = await this.disciplineService.findOne(createAthleteDto.disciplineId);
-    if(!getDiscipline){
-      throw new NotFoundException(`The discipline with id: ${createAthleteDto.disciplineId} not exists!`)
-    }
-    return await this.athletesService.create(createAthleteDto, getDiscipline);
+    return await this.athletesService.create(createAthleteDto); 
   }
 
   @Get()

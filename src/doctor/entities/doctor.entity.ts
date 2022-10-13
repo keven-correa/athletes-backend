@@ -2,6 +2,9 @@ import { Appointment } from '../../appointment/entities/appointment.entity';
 import { Therapy } from '../../therapy/entities/therapy.entity';
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { Evaluation } from '../../evaluation/entities/evaluation.entity';
+import { doctorsTypes } from '../enums/enums';
+
+
 
 @Entity('Doctors')
 export class Doctor {
@@ -21,6 +24,9 @@ export class Doctor {
 
   @Column('text')
   phone: string;
+
+  @Column({type: 'enum', enum: doctorsTypes})
+  doctorType: doctorsTypes;
 
   @OneToMany(() => Appointment, (doctorAppointment) => doctorAppointment.doctor)
   appointments: Appointment[];

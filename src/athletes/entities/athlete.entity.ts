@@ -38,7 +38,7 @@ export class Athlete {
   @Column()
   dateOfBirth: Date;
 
-  @Column({type: 'enum', enum: MaritalStatus})
+  @Column({ type: 'enum', enum: MaritalStatus })
   maritalStatus: MaritalStatus;
 
   @Column({ type: 'enum', enum: PatientType })
@@ -64,6 +64,9 @@ export class Athlete {
 
   @Column('float')
   height: number;
+
+  @Column('bool', { default: true })
+  isActive: boolean;
 
   @OneToMany(
     () => Appointment,

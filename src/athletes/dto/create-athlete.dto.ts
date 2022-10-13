@@ -1,5 +1,5 @@
 import { Type } from "class-transformer";
-import { IsDate, IsEnum, IsMobilePhone, IsNotEmpty, IsPhoneNumber, Length, Max, MaxLength } from "class-validator";
+import { IsBoolean, IsDate, IsEnum, IsMobilePhone, IsNotEmpty, IsPhoneNumber, Length, Max, MaxLength } from "class-validator";
 import { BloodType, LevelOfSchooling, MaritalStatus, PatientType } from "../enums/enum";
 
 export class CreateAthleteDto {
@@ -50,6 +50,10 @@ export class CreateAthleteDto {
 
   @IsNotEmpty()
   height: number
+
+  @IsNotEmpty()
+  @IsBoolean()
+  isActive: boolean
 
   @IsNotEmpty()
   disciplineId: number;

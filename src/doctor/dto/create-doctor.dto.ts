@@ -1,4 +1,5 @@
-import { IsEmail, IsNotEmpty, IsPhoneNumber } from "class-validator";
+import { IsEmail, IsEnum, IsNotEmpty, IsPhoneNumber } from "class-validator";
+import { doctorsTypes } from "../enums/enums";
 
 export class CreateDoctorDto {
 
@@ -15,5 +16,8 @@ export class CreateDoctorDto {
     @IsNotEmpty()
     @IsPhoneNumber('DO')
     phone: string;
+
+    @IsNotEmpty()
+    doctorType: doctorsTypes
 
 }
