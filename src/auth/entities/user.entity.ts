@@ -20,6 +20,9 @@ export class User {
   @Column('text')
   password: string;
 
+  @Column('bool', { default: true })
+  isActive: boolean;
+
   @Column({
     type: 'enum',
     enum: Role,
