@@ -14,7 +14,6 @@ import {
   NotFoundException,
   UseGuards,
 } from '@nestjs/common';
-import { DisciplineService } from '../discipline/discipline.service';
 import { PaginationDto } from '../common/dtos/pagination.dto';
 import { AthletesService } from './athletes.service';
 import { CreateAthleteDto } from './dto/create-athlete.dto';
@@ -23,7 +22,6 @@ import { Auth } from '../auth/decorators/auth.decorator';
 import { Role } from '../auth/enums/user.roles';
 import { GetUserDecorator } from '../auth/decorators/get-user.decorator';
 import { User } from '../auth/entities/user.entity';
-import { InactivaAthleteDto } from './dto/inactivate-athlete.dto';
 
 @Controller('athletes')
 export class AthleteController {
@@ -47,6 +45,7 @@ export class AthleteController {
   }
 
   @Get(':id')
+  @Auth()
   @HttpCode(HttpStatus.OK)
   findOne(@Param('id', ParseIntPipe) id: number) {
     return this.athletesService.findOne(id);

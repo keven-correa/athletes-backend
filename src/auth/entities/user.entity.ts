@@ -1,5 +1,14 @@
 import { Athlete } from '../../athletes/entities/athlete.entity';
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  OneToMany,
+  OneToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { Role } from '../enums/user.roles';
 
 @Entity('Users')
@@ -31,9 +40,25 @@ export class User {
   })
   role: Role;
 
-  @OneToMany(
-    () => Athlete,
-    (athlete) => athlete.user
-  )
-  athlete: Athlete
+  @CreateDateColumn({
+    type: 'timestamp',
+    default: () => 'CURRENT_TIMESTAMP(6)',
+  })
+  created_at: Date;
+
+  @CreateDateColumn({
+    type: 'timestamp',
+    default: () => 'CURRENT_TIMESTAMP(6)',
+  })
+  updated_at: Date;
+
+  @OneToMany(() => Athlete, (athlete) => athlete.user)
+  athlete: Athlete;
+
+  @ManyToOne((type) => User, (user) => user.users)
+  user_create: User
+
+  @OneToMany((user) => User, (user) => user.user_create)
+  @JoinColumn()
+  users: User[];
 }

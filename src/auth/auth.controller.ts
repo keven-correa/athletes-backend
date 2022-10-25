@@ -1,10 +1,11 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Req, SetMetadata } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Req, SetMetadata, HttpCode, HttpStatus, ParseIntPipe } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { AuthService } from './auth.service';
 import { Auth } from './decorators/auth.decorator';
 import { GetUserDecorator } from './decorators/get-user.decorator';
 import { RoleProtected } from './decorators/role-protected.decorator';
 import { CreateUserDto } from './dto/create-user.dto';
+import { InactivateUserDto } from './dto/inactivate-user.dto';
 import { LoginUserDto } from './dto/login-user.dto';
 import { User } from './entities/user.entity';
 import { Role } from './enums/user.roles';
@@ -15,15 +16,33 @@ export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @Post('register')
-  create(@Body() createUserDto: CreateUserDto) {
-    return this.authService.create(createUserDto);
+  @Auth(Role.Admin)
+  create(@Body() createUserDto: CreateUserDto, @GetUserDecorator() user: User) {
+    return this.authService.create(createUserDto, user);
   }
 
   @Post('login')
   login(@Body() loginUserDto: LoginUserDto){
     return this.authService.login(loginUserDto);
   }
-  
+
+  @Get('list-users')
+  @Auth(Role.Admin)
+  getAllUsers(){
+    return this.authService.getAllUsers();
+  }
+
+  @Patch(':id')
+  @HttpCode(HttpStatus.OK)
+  @Auth(Role.Admin)
+  changeStatusUser(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() inactivateUserDto: InactivateUserDto,
+    @GetUserDecorator() user: User,
+  ){
+    return this.authService.inactivateUser(id, inactivateUserDto)
+  }
+
   // @Get('private')
   // @UseGuards(AuthGuard())
   // testingPrivateRoute(@GetUserDecorator('email') user: User){

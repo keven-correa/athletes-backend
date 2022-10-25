@@ -7,7 +7,7 @@ import { LoginUserDto } from './dto/login-user.dto';
 import { User } from './entities/user.entity';
 import * as bcrypt from 'bcrypt';
 import { JwtPayload } from './interfaces/jwt-payload.interface';
-
+import { InactivateUserDto } from './dto/inactivate-user.dto';
 
 @Injectable()
 export class AuthService {
@@ -15,42 +15,55 @@ export class AuthService {
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
     private readonly jwtService: JwtService,
-  ){
-
-  }
-  async create(createUserDto: CreateUserDto) {
-    try {
-      const {password, ...userData} = createUserDto;
-      const user = this.userRepository.create({
-        ...userData,
-        password: bcrypt.hashSync(password, 10)
-      });
-      await this.userRepository.save(user);
-      delete user.password;
-      delete user.isActive;
-      return {
-        ...user,
-        token: this.getJwtToken({id: user.id}),
-      };
-    } catch (error) {
-      console.log(error)
-    }
+  ) {}
+  async create(createUserDto: CreateUserDto, user: User) {
+    const { password, ...userData } = createUserDto;
+    const userCreate = this.userRepository.create({
+      ...userData,
+      password: bcrypt.hashSync(password, 10),
+      user_create: user,
+    });
+    await this.userRepository.save(userCreate);
+    delete userCreate.password;
+    delete userCreate.isActive;
+    return {
+      ...userCreate,
+      // created,
+      token: this.getJwtToken({ id: userCreate.id }),
+    };
   }
 
-  async login(loginUserDto: LoginUserDto){
-    const {password, email} = loginUserDto;
+  async login(loginUserDto: LoginUserDto) {
+    const { password, email } = loginUserDto;
     const user = await this.userRepository.findOne({
-      where: {email},
-      select: {email: true, password: true, id: true}
+      where: { email },
+      select: { email: true, password: true, id: true },
     });
 
-    if(!user) throw new UnauthorizedException('Credentials are not valid (Email)');
-    if(!bcrypt.compareSync(password, user.password)) throw new UnauthorizedException('Credentials are not valid (Password)');
+    if (!user)
+      throw new UnauthorizedException('Credentials are not valid (Email)');
+    if (!bcrypt.compareSync(password, user.password))
+      throw new UnauthorizedException('Credentials are not valid (Password)');
 
     return {
       ...user,
-      token: this.getJwtToken({id: user.id})
-    }
+      token: this.getJwtToken({ id: user.id }),
+    };
+  }
+
+  async getAllUsers() {
+    return this.userRepository.find({
+      relations: ['user_create'],
+    });
+  }
+
+  async inactivateUser(id: number, inactivateUserDto: InactivateUserDto) {
+    const inactivate = await this.userRepository.preload({
+      id: id,
+      ...inactivateUserDto,
+    });
+    await this.userRepository.save(inactivate);
+    return inactivate;
   }
 
   private getJwtToken(payload: JwtPayload) {
