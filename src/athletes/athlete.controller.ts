@@ -23,6 +23,7 @@ import { Auth } from '../auth/decorators/auth.decorator';
 import { Role } from '../auth/enums/user.roles';
 import { GetUserDecorator } from '../auth/decorators/get-user.decorator';
 import { User } from '../auth/entities/user.entity';
+import { InactivaAthleteDto } from './dto/inactivate-athlete.dto';
 
 @Controller('athletes')
 export class AthleteController {
@@ -31,7 +32,10 @@ export class AthleteController {
   @Post()
   @Auth(Role.Secretary, Role.Admin)
   @HttpCode(HttpStatus.CREATED)
-  async create(@Body() createAthleteDto: CreateAthleteDto, @GetUserDecorator() user: User ) {
+  async create(
+    @Body() createAthleteDto: CreateAthleteDto,
+    @GetUserDecorator() user: User,
+  ) {
     return await this.athletesService.create(createAthleteDto, user);
   }
 
@@ -50,17 +54,24 @@ export class AthleteController {
 
   @Patch(':id')
   @HttpCode(HttpStatus.OK)
+  @Auth(Role.Secretary, Role.Admin)
   update(
     @Param('id', ParseIntPipe) id: number,
     @Body() updateAthleteDto: UpdateAthleteDto,
-    @GetUserDecorator() user: User
+    @GetUserDecorator() user: User,
   ) {
     return this.athletesService.update(id, updateAthleteDto, user);
   }
 
-  @Delete(':id')
-  @HttpCode(HttpStatus.NO_CONTENT)
-  remove(@Param('id', ParseIntPipe) id: number) {
-    return this.athletesService.remove(id);
-  }
+  // @Patch(':id')
+  // @HttpCode(HttpStatus.OK)
+  // @Auth(Role.Admin)
+  // inactivateUser(@Param('id', ParseIntPipe) id: number, @Body() inactivateAthleteDto: InactivaAthleteDto, @GetUserDecorator() user: User){
+  //   return this.athletesService.inactivate(id, inactivateAthleteDto, user)
+  // }
+  // @Delete(':id')
+  // @HttpCode(HttpStatus.NO_CONTENT)
+  // remove(@Param('id', ParseIntPipe) id: number) {
+  //   return this.athletesService.remove(id);
+  // }
 }

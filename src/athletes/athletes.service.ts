@@ -15,6 +15,7 @@ import { validate as isUUID } from 'uuid';
 import { isInt } from 'class-validator';
 import { Discipline } from '../discipline/entities/discipline.entity';
 import { User } from '../auth/entities/user.entity';
+import { InactivaAthleteDto } from './dto/inactivate-athlete.dto';
 
 @Injectable()
 export class AthletesService {
@@ -107,7 +108,7 @@ export class AthletesService {
       id: id,
       ...updateAthleteDto,
       user,
-      discipline: getDiscipline
+      discipline: getDiscipline,
     });
     if (!athlete) {
       throw new NotFoundException(`The athlete with id: ${id} not found.`);
@@ -119,7 +120,16 @@ export class AthletesService {
       this.handleDbException(error);
     }
   }
-
+  async inactivate(id: number, inactivaAthleteDto: InactivaAthleteDto, user: User) {
+    const athleteExists = this.findOne(id);
+    if (!athleteExists)
+      throw new NotFoundException(`The athlete with id: ${id} not found.`);
+    await this.athleteRepository.preload({
+      id: id,
+      ...inactivaAthleteDto,
+      user
+    });
+  }
   // async modifyStatus(id: number){
   //   const athleteExists = this.findOne(id);
   //   if (!athleteExists)
@@ -127,13 +137,13 @@ export class AthletesService {
 
   // }
 
-  async remove(id: number) {
-    const athleteExists = this.findOne(id);
-    if (!athleteExists)
-      throw new NotFoundException(`The athlete with id: ${id} not found.`);
-    await this.athleteRepository.delete(id);
-    return 'Deleted';
-  }
+  // async remove(id: number) {
+  //   const athleteExists = this.findOne(id);
+  //   if (!athleteExists)
+  //     throw new NotFoundException(`The athlete with id: ${id} not found.`);
+  //   await this.athleteRepository.delete(id);
+  //   return 'Deleted';
+  // }
 
   private handleDbException(error: any) {
     this.logger.error(error);
