@@ -17,6 +17,7 @@ import {
 import { Therapy } from '../../therapy/entities/therapy.entity';
 import { Evaluation } from '../../evaluation/entities/evaluation.entity';
 import { Discipline } from '../../discipline/entities/discipline.entity';
+import { User } from '../../auth/entities/user.entity';
 
 @Entity('Athletes')
 export class Athlete {
@@ -84,4 +85,11 @@ export class Athlete {
   // @ManyToOne(() => Athlete, (athlete) => athlete.discipline)
   @ManyToOne(() => Discipline, (discipline) => discipline.athletes)
   discipline: Discipline;
+
+  @ManyToOne(
+    () => User,
+    (user) => user.athlete,
+    {eager: true}
+  )
+  user: User
 }

@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Athlete } from '../../athletes/entities/athlete.entity';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { Role } from '../enums/user.roles';
 
 @Entity('Users')
@@ -29,4 +30,10 @@ export class User {
     default: Role.Admin,
   })
   role: Role;
+
+  @OneToMany(
+    () => Athlete,
+    (athlete) => athlete.user
+  )
+  athlete: Athlete
 }

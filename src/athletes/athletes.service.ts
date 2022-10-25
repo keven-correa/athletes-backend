@@ -14,6 +14,7 @@ import { Athlete } from './entities/athlete.entity';
 import { validate as isUUID } from 'uuid';
 import { isInt } from 'class-validator';
 import { Discipline } from '../discipline/entities/discipline.entity';
+import { User } from '../auth/entities/user.entity';
 
 @Injectable()
 export class AthletesService {
@@ -26,7 +27,7 @@ export class AthletesService {
     private readonly disciplineRepository: Repository<Discipline>,
   ) {}
 
-  async create(createAthleteDto: CreateAthleteDto) {
+  async create(createAthleteDto: CreateAthleteDto, user: User) {
     //disciplineParam: Discipline
     const getDiscipline = await this.disciplineRepository.findOne({
       where: { id: createAthleteDto.disciplineId },
@@ -40,6 +41,7 @@ export class AthletesService {
       const newAthlete = this.athleteRepository.create({
         ...createAthleteDto,
         discipline: getDiscipline,
+        user,
       });
       if (!newAthlete.discipline) {
         throw new BadRequestException();
@@ -52,10 +54,10 @@ export class AthletesService {
   }
 
   async findAll(paginationDto: PaginationDto) {
-    const { limit = 10, offset = 0 } = paginationDto;
+    // const { limit = 10, offset = 0 } = paginationDto;
     return await this.athleteRepository.find({
-      take: limit,
-      skip: offset,
+      // take: limit,
+      // skip: offset,
       relations: ['discipline'],
       loadEagerRelations: true,
     });
@@ -92,7 +94,7 @@ export class AthletesService {
   //   return athlete;
   // }
 
-  async update(id: number, updateAthleteDto: UpdateAthleteDto) {
+  async update(id: number, updateAthleteDto: UpdateAthleteDto, user: User) {
     const getDiscipline = await this.disciplineRepository.findOne({
       where: { id: updateAthleteDto.disciplineId },
     });
@@ -104,6 +106,7 @@ export class AthletesService {
     const athlete = await this.athleteRepository.preload({
       id: id,
       ...updateAthleteDto,
+      user,
       discipline: getDiscipline
     });
     if (!athlete) {
