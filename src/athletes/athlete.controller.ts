@@ -22,7 +22,9 @@ import { Auth } from '../auth/decorators/auth.decorator';
 import { Role } from '../auth/enums/user.roles';
 import { GetUserDecorator } from '../auth/decorators/get-user.decorator';
 import { User } from '../auth/entities/user.entity';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Athletes')
 @Controller('athletes')
 export class AthleteController {
   constructor(private readonly athletesService: AthletesService) {}

@@ -10,6 +10,7 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Role } from '../enums/user.roles';
+import { Discipline } from '../../discipline/entities/discipline.entity';
 
 @Entity('Users')
 export class User {
@@ -54,6 +55,9 @@ export class User {
 
   @OneToMany(() => Athlete, (athlete) => athlete.user)
   athlete: Athlete;
+
+  @OneToMany(() => Discipline, (discipline) => discipline.createdBy)
+  discipline: Discipline
 
   @ManyToOne((type) => User, (user) => user.users)
   user_create: User

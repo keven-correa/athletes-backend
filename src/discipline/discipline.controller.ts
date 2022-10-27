@@ -1,18 +1,40 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  HttpCode,
+  HttpStatus,
+} from '@nestjs/common';
+import { GetUserDecorator } from '../auth/decorators/get-user.decorator';
+import { User } from '../auth/entities/user.entity';
+import { Auth } from '../auth/decorators/auth.decorator';
+import { Role } from '../auth/enums/user.roles';
 import { DisciplineService } from './discipline.service';
 import { CreateDisciplineDto } from './dto/create-discipline.dto';
 import { UpdateDisciplineDto } from './dto/update-discipline.dto';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Discipline')
 @Controller('discipline')
 export class DisciplineController {
   constructor(private readonly disciplineService: DisciplineService) {}
 
   @Post()
-  create(@Body() createDisciplineDto: CreateDisciplineDto) {
-    return this.disciplineService.create(createDisciplineDto);
+  @Auth(Role.Admin)
+  @HttpCode(HttpStatus.CREATED)
+  create(
+    @Body() createDisciplineDto: CreateDisciplineDto,
+    @GetUserDecorator() user: User,
+  ) {
+    return this.disciplineService.create(createDisciplineDto, user);
   }
 
   @Get()
+  @Auth(Role.Admin, Role.GeneralystPhysiciann, Role.Physiotherapist, Role.Secretary)
   findAll() {
     return this.disciplineService.findAll();
   }
@@ -23,7 +45,10 @@ export class DisciplineController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateDisciplineDto: UpdateDisciplineDto) {
+  update(
+    @Param('id') id: string,
+    @Body() updateDisciplineDto: UpdateDisciplineDto,
+  ) {
     return this.disciplineService.update(+id, updateDisciplineDto);
   }
 
