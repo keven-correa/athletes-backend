@@ -21,7 +21,7 @@ export class AuthService {
     const userCreate = this.userRepository.create({
       ...userData,
       password: bcrypt.hashSync(password, 10),
-      user_create: user,
+      created_by: user,
     });
     await this.userRepository.save(userCreate);
     delete userCreate.password;
@@ -53,7 +53,7 @@ export class AuthService {
 
   async getAllUsers() {
     return this.userRepository.find({
-      relations: ['user_create'],
+      relations: ['created_by'],
     });
   }
 

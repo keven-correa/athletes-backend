@@ -53,16 +53,16 @@ export class User {
   })
   updated_at: Date;
 
-  @OneToMany(() => Athlete, (athlete) => athlete.user)
+  @OneToMany(() => Athlete, (athlete) => athlete.created_by)
   athlete: Athlete;
 
   @OneToMany(() => Discipline, (discipline) => discipline.createdBy)
   discipline: Discipline
 
   @ManyToOne((type) => User, (user) => user.users)
-  user_create: User
+  created_by: User
 
-  @OneToMany((user) => User, (user) => user.user_create)
+  @OneToMany((user) => User, (user) => user.created_by)
   @JoinColumn()
   users: User[];
 }

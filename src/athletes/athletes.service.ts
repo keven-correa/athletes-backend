@@ -42,7 +42,7 @@ export class AthletesService {
       const newAthlete = this.athleteRepository.create({
         ...createAthleteDto,
         discipline: getDiscipline,
-        user,
+        created_by: user,
       });
       if (!newAthlete.discipline) {
         throw new BadRequestException();
@@ -56,12 +56,16 @@ export class AthletesService {
 
   async findAll(paginationDto: PaginationDto) {
     // const { limit = 10, offset = 0 } = paginationDto;
-    return await this.athleteRepository.find({
+    const athletes = await this.athleteRepository.find({
       // take: limit,
       // skip: offset,
-      relations: ['discipline'],
+      relations: {
+        discipline: true
+      },
       loadEagerRelations: true,
     });
+    
+    return athletes;
   }
   async findOne(id: number) {
     let athlete: Athlete;
@@ -96,6 +100,7 @@ export class AthletesService {
   // }
 
   async update(id: number, updateAthleteDto: UpdateAthleteDto, user: User) {
+    
     const getDiscipline = await this.disciplineRepository.findOne({
       where: { id: updateAthleteDto.disciplineId },
     });
@@ -107,7 +112,7 @@ export class AthletesService {
     const athlete = await this.athleteRepository.preload({
       id: id,
       ...updateAthleteDto,
-      user,
+      created_by: user,
       discipline: getDiscipline,
     });
     if (!athlete) {
@@ -127,7 +132,7 @@ export class AthletesService {
     await this.athleteRepository.preload({
       id: id,
       ...inactivaAthleteDto,
-      user
+      created_by: user
     });
   }
   // async modifyStatus(id: number){

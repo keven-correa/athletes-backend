@@ -86,10 +86,14 @@ export class Athlete {
   @ManyToOne(() => Discipline, (discipline) => discipline.athletes)
   discipline: Discipline;
 
+  @JoinColumn({name: "created_by"})
   @ManyToOne(
     () => User,
     (user) => user.athlete,
     {eager: true}
   )
-  user: User
+  created_by: User
+
+  // @Column({name: "created_by"})
+  // created_by: number;
 }
