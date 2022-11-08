@@ -40,19 +40,23 @@ export class DisciplineController {
   }
 
   @Get(':id')
+  @Auth(Role.Admin, Role.GeneralystPhysiciann, Role.Physiotherapist, Role.Secretary)
   findOne(@Param('id') id: string) {
     return this.disciplineService.findOne(+id);
   }
 
   @Patch(':id')
+  @Auth(Role.Admin)
   update(
-    @Param('id') id: string,
+    @Param('id') id: number,
     @Body() updateDisciplineDto: UpdateDisciplineDto,
+    @GetUserDecorator() user: User
   ) {
-    return this.disciplineService.update(+id, updateDisciplineDto);
+    return this.disciplineService.update(id, updateDisciplineDto, user);
   }
 
   @Delete(':id')
+  @Auth(Role.Admin)
   remove(@Param('id') id: string) {
     return this.disciplineService.remove(+id);
   }

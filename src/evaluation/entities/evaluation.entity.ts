@@ -1,5 +1,5 @@
 import { Doctor } from '../../doctor/entities/doctor.entity';
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { Athlete } from '../../athletes/entities/athlete.entity';
 
 @Entity('Evaluations')
@@ -27,6 +27,18 @@ export class Evaluation {
 
   @ManyToOne(() => Doctor, (doctorEvaluation) => doctorEvaluation.evaluations)
   doctor: Doctor;
+
+  @CreateDateColumn({
+    type: 'timestamp',
+    default: () => 'CURRENT_TIMESTAMP(6)',
+  })
+  created_at: Date;
+
+  @CreateDateColumn({
+    type: 'timestamp',
+    default: () => 'CURRENT_TIMESTAMP(6)',
+  })
+  updated_at: Date;
 
   @ManyToOne(
     () => Athlete,

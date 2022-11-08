@@ -1,7 +1,9 @@
 import { Athlete } from '../../athletes/entities/athlete.entity';
 import {
   Column,
+  CreateDateColumn,
   Entity,
+  JoinColumn,
   ManyToMany,
   ManyToOne,
   OneToMany,
@@ -24,6 +26,23 @@ export class Discipline {
   @OneToMany(() => Athlete, (disciplineAthlete) => disciplineAthlete.discipline)
   athletes: Athlete[];
 
+  @CreateDateColumn({
+    type: 'timestamp',
+    default: () => 'CURRENT_TIMESTAMP(6)',
+  })
+  created_at: Date;
+
+  @CreateDateColumn({
+    type: 'timestamp',
+    default: () => 'CURRENT_TIMESTAMP(6)',
+  })
+  updated_at: Date;
+
+  @JoinColumn({ name: 'created_by' })
   @ManyToOne(() => User, (user) => user.discipline, { eager: true })
-  createdBy: User;
+  created_by: User;
+
+  @JoinColumn({ name: 'updated_by' })
+  @ManyToOne(() => User, (user) => user.discipline, { eager: true })
+  updated_by: User;
 }

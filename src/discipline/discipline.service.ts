@@ -12,11 +12,11 @@ export class DisciplineService {
     @InjectRepository(Discipline)
     private readonly disciplineRepository: Repository<Discipline>,
   ) {}
-  async create(createDisciplineDto: CreateDisciplineDto, createdBy: User) {
+  async create(createDisciplineDto: CreateDisciplineDto, user: User) {
     try {
       const createdDiscipline = this.disciplineRepository.create({
         ...createDisciplineDto,
-        createdBy,
+        created_by: user,
       });
       this.disciplineRepository.save(createdDiscipline);
       return createdDiscipline;
@@ -33,10 +33,11 @@ export class DisciplineService {
     return await this.disciplineRepository.findOneBy({ id: id });
   }
 
-  async update(id: number, updateDisciplineDto: UpdateDisciplineDto) {
+  async update(id: number, updateDisciplineDto: UpdateDisciplineDto, user: User) {
     const discipline = await this.disciplineRepository.preload({
       id: id,
       ...updateDisciplineDto,
+      updated_by: user
     });
 
     await this.disciplineRepository.save(discipline);

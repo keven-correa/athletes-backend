@@ -1,10 +1,17 @@
 import { Appointment } from '../../appointment/entities/appointment.entity';
 import { Therapy } from '../../therapy/entities/therapy.entity';
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { Evaluation } from '../../evaluation/entities/evaluation.entity';
 import { doctorsTypes } from '../enums/enums';
-
-
+import { User } from '../../auth/entities/user.entity';
 
 @Entity('Doctors')
 export class Doctor {
@@ -25,7 +32,18 @@ export class Doctor {
   @Column('text')
   phone: string;
 
-  @Column({type: 'enum', enum: doctorsTypes})
+  @CreateDateColumn({
+    type: 'timestamp',
+    default: () => 'CURRENT_TIMESTAMP(6)',
+  })
+  created_at: Date;
+
+  @CreateDateColumn({
+    type: 'timestamp',
+    default: () => 'CURRENT_TIMESTAMP(6)',
+  })
+  updated_at: Date;
+  @Column({ type: 'enum', enum: doctorsTypes })
   doctorType: doctorsTypes;
 
   @OneToMany(() => Appointment, (doctorAppointment) => doctorAppointment.doctor)
@@ -36,4 +54,12 @@ export class Doctor {
 
   @OneToMany(() => Evaluation, (doctorEvaluation) => doctorEvaluation.doctor)
   evaluations?: Evaluation[];
+
+  @JoinColumn({ name: 'created_by' })
+  @ManyToOne(() => User, (user) => user.created_by, { eager: true })
+  created_by: User;
+
+  @JoinColumn({ name: 'updated_by' })
+  @ManyToOne(() => User, (user) => user.doctor_updated_by, { eager: true })
+  updated_by: User;
 }

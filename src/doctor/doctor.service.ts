@@ -5,6 +5,7 @@ import { Repository } from 'typeorm';
 import { CreateDoctorDto } from './dto/create-doctor.dto';
 import { UpdateDoctorDto } from './dto/update-doctor.dto';
 import { Doctor } from './entities/doctor.entity';
+import { User } from '../auth/entities/user.entity';
 
 @Injectable()
 export class DoctorService {
@@ -14,9 +15,12 @@ export class DoctorService {
     private readonly doctorRepository: Repository<Doctor>,
   ) {}
 
-  async create(createDoctorDto: CreateDoctorDto) {
+  async create(createDoctorDto: CreateDoctorDto, user: User) {
     try {
-      const doctor =  this.doctorRepository.create(createDoctorDto);
+      const doctor =  this.doctorRepository.create({
+        ...createDoctorDto,
+        created_by: user
+      });
       await this.doctorRepository.save(doctor);
       return doctor;
     } catch (error) {
@@ -41,10 +45,11 @@ export class DoctorService {
     return doctor;
   }
 
-  async update(id: number, updateDoctorDto: UpdateDoctorDto) {
+  async update(id: number, updateDoctorDto: UpdateDoctorDto, user: User) {
     const athlete = await this.doctorRepository.preload({
       id: id,
       ...updateDoctorDto,
+      updated_by: user
     });
     if (!athlete) {
       throw new NotFoundException(`The doctor with id: ${id} not found.`);

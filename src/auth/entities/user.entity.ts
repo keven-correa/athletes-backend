@@ -11,6 +11,7 @@ import {
 } from 'typeorm';
 import { Role } from '../enums/user.roles';
 import { Discipline } from '../../discipline/entities/discipline.entity';
+import { Doctor } from '../../doctor/entities/doctor.entity';
 
 @Entity('Users')
 export class User {
@@ -56,7 +57,13 @@ export class User {
   @OneToMany(() => Athlete, (athlete) => athlete.created_by)
   athlete: Athlete;
 
-  @OneToMany(() => Discipline, (discipline) => discipline.createdBy)
+  @OneToMany(() => Doctor, (doctor) => doctor.created_by)
+  doctor: Doctor
+
+  @OneToMany(() => Doctor, (doctor) => doctor.updated_by)
+  doctor_updated_by: Doctor
+
+  @OneToMany(() => Discipline, (discipline) => discipline.created_by)
   discipline: Discipline
 
   @ManyToOne((type) => User, (user) => user.users)
