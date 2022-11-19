@@ -11,8 +11,6 @@ import { Repository } from 'typeorm';
 import { CreateAthleteDto } from './dto/create-athlete.dto';
 import { UpdateAthleteDto } from './dto/update-athlete.dto';
 import { Athlete } from './entities/athlete.entity';
-import { validate as isUUID } from 'uuid';
-import { isInt } from 'class-validator';
 import { Discipline } from '../discipline/entities/discipline.entity';
 import { User } from '../auth/entities/user.entity';
 import { InactivaAthleteDto } from './dto/inactivate-athlete.dto';
@@ -55,10 +53,10 @@ export class AthletesService {
   }
 
   async findAll(paginationDto: PaginationDto) {
-    // const { limit = 10, offset = 0 } = paginationDto;
+    const { limit = 10, offset = 0 } = paginationDto;
     const athletes = await this.athleteRepository.find({
-      // take: limit,
-      // skip: offset,
+      take: limit,
+      skip: offset,
       relations: {
         discipline: true
       },
@@ -77,27 +75,6 @@ export class AthletesService {
     }
     return athlete;
   }
-  // async findOne(searchParam: string | number) {
-  //   let athlete: Athletes;
-  //   if (isInt(searchParam)) {
-  //     athlete = await this.athleteRepository.findOneBy({ id: searchParam });
-  //   } else {
-  //     const queryBuilder = this.athleteRepository.createQueryBuilder();
-  //     athlete = await queryBuilder
-  //       .where('UPPER(name) =:name or document =:document', {
-  //         name: searchParam.toUpperCase(),
-  //         document: searchParam,
-  //       })
-  //       .getOne();
-  //   }
-
-  //   if (!athlete) {
-  //     throw new NotFoundException(
-  //       `The Athlete with search term ${searchParam} not found or dosen't exist.`,
-  //     );
-  //   }
-  //   return athlete;
-  // }
 
   async update(id: number, updateAthleteDto: UpdateAthleteDto, user: User) {
     
@@ -112,7 +89,7 @@ export class AthletesService {
     const athlete = await this.athleteRepository.preload({
       id: id,
       ...updateAthleteDto,
-      created_by: user,
+      updated_by: user,
       discipline: getDiscipline,
     });
     if (!athlete) {
@@ -125,6 +102,7 @@ export class AthletesService {
       this.handleDbException(error);
     }
   }
+
   async inactivate(id: number, inactivaAthleteDto: InactivaAthleteDto, user: User) {
     const athleteExists = this.findOne(id);
     if (!athleteExists)

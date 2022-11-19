@@ -42,8 +42,8 @@ export class Athlete {
   @Column({ type: 'enum', enum: MaritalStatus })
   maritalStatus: MaritalStatus;
 
-  @Column({ type: 'enum', enum: PatientType })
-  patientType: PatientType;
+  // @Column({ type: 'enum', enum: PatientType })
+  // patientType: PatientType;
 
   @Column({ type: 'enum', enum: LevelOfSchooling })
   levelOfSchooling: LevelOfSchooling;
@@ -89,6 +89,10 @@ export class Athlete {
   @JoinColumn({ name: 'created_by' })
   @ManyToOne(() => User, (user) => user.athlete, { eager: true })
   created_by: User;
+
+  @JoinColumn({name: 'updated_by'})
+  @ManyToOne(() => User, (user) => user.athlete, {eager: true})
+  updated_by: User;
 
   // @Column({name: "created_by"})
   // created_by: number;
