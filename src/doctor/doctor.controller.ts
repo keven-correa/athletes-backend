@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, ParseIntPipe, HttpCode, HttpStatus } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, ParseIntPipe, HttpCode, HttpStatus, Query } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { Role } from '../auth/enums/user.roles';
 import { Auth } from '../auth/decorators/auth.decorator';
@@ -24,7 +24,7 @@ export class DoctorController {
 
   @Get()
   @HttpCode(HttpStatus.OK)
-  findAll(paginationDto: PaginationDto) {
+  findAll(@Query() paginationDto: PaginationDto) {
     return this.doctorService.findAll(paginationDto);
   }
 
