@@ -48,7 +48,7 @@ export class AthleteController {
   }
 
   @Get(':id')
-  @Auth()
+  @Auth(Role.Secretary, Role.Admin)
   @HttpCode(HttpStatus.OK)
   findOne(@Param('id', ParseIntPipe) id: number) {
     return this.athletesService.findOne(id);
