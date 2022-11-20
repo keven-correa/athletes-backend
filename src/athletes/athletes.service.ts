@@ -46,6 +46,10 @@ export class AthletesService {
         throw new BadRequestException();
       }
       await this.athleteRepository.save(newAthlete);
+      delete newAthlete.created_by.password;
+      delete newAthlete.created_by.created_at;
+      delete newAthlete.created_by.updated_at;
+      delete newAthlete.created_by.isActive; 
       return newAthlete;
     } catch (error) {
       this.handleDbException(error);
@@ -97,6 +101,11 @@ export class AthletesService {
     }
     try {
       await this.athleteRepository.save(athlete);
+      
+      delete athlete.updated_by.password;
+      delete athlete.updated_by.created_at;
+      delete athlete.updated_by.updated_at;
+      delete athlete.updated_by.isActive;
       return athlete;
     } catch (error) {
       this.handleDbException(error);
