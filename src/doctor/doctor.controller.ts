@@ -1,5 +1,5 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, ParseIntPipe, HttpCode, HttpStatus } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { Role } from '../auth/enums/user.roles';
 import { Auth } from '../auth/decorators/auth.decorator';
 import { PaginationDto } from '../common/dtos/pagination.dto';
@@ -10,6 +10,7 @@ import { GetUserDecorator } from '../auth/decorators/get-user.decorator';
 import { User } from '../auth/entities/user.entity';
 
 @ApiTags('Doctor')
+@ApiBearerAuth("Bearer")
 @Controller('doctor')
 export class DoctorController {
   constructor(private readonly doctorService: DoctorService) {}

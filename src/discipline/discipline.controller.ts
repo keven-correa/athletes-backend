@@ -16,9 +16,10 @@ import { Role } from '../auth/enums/user.roles';
 import { DisciplineService } from './discipline.service';
 import { CreateDisciplineDto } from './dto/create-discipline.dto';
 import { UpdateDisciplineDto } from './dto/update-discipline.dto';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
 @ApiTags('Discipline')
+@ApiBearerAuth("Bearer")
 @Controller('discipline')
 export class DisciplineController {
   constructor(private readonly disciplineService: DisciplineService) {}
