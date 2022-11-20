@@ -22,7 +22,7 @@ import { Auth } from '../auth/decorators/auth.decorator';
 import { Role } from '../auth/enums/user.roles';
 import { GetUserDecorator } from '../auth/decorators/get-user.decorator';
 import { User } from '../auth/entities/user.entity';
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 
 @ApiTags('Athletes')
 @ApiBearerAuth("Bearer")
@@ -33,6 +33,7 @@ export class AthleteController {
   @Post()
   @Auth(Role.Secretary, Role.Admin)
   @HttpCode(HttpStatus.CREATED)
+  @ApiOperation({summary: 'create a new Athlete'})
   async create(
     @Body() createAthleteDto: CreateAthleteDto,
     @GetUserDecorator() user: User,
@@ -43,6 +44,7 @@ export class AthleteController {
   @Get()
   @Auth(Role.Secretary, Role.Admin)
   @HttpCode(HttpStatus.OK)
+  @ApiOperation({summary: 'Get all Athletes'})
   findAll(@Query() paginationDto: PaginationDto) {
     return this.athletesService.findAll(paginationDto);
   }
@@ -50,6 +52,7 @@ export class AthleteController {
   @Get(':id')
   @Auth(Role.Secretary, Role.Admin)
   @HttpCode(HttpStatus.OK)
+  @ApiOperation({summary: 'Get one Athlete by id'})
   findOne(@Param('id', ParseIntPipe) id: number) {
     return this.athletesService.findOne(id);
   }
@@ -57,6 +60,7 @@ export class AthleteController {
   @Patch(':id')
   @HttpCode(HttpStatus.OK)
   @Auth(Role.Secretary, Role.Admin)
+  @ApiOperation({summary: 'update an Athlete'})
   update(
     @Param('id', ParseIntPipe) id: number,
     @Body() updateAthleteDto: UpdateAthleteDto,

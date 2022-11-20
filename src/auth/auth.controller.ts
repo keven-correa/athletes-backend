@@ -1,6 +1,6 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Req, SetMetadata, HttpCode, HttpStatus, ParseIntPipe } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { AuthService } from './auth.service';
 import { Auth } from './decorators/auth.decorator';
 import { GetUserDecorator } from './decorators/get-user.decorator';
@@ -20,17 +20,20 @@ export class AuthController {
 
   @Post('register')
   @Auth(Role.Admin)
+  @ApiOperation({summary: 'Register a new user'})
   create(@Body() createUserDto: CreateUserDto, @GetUserDecorator() user: User) {
     return this.authService.create(createUserDto, user);
   }
 
   @Post('login')
+  @ApiOperation({summary: 'Login with email and password'})
   login(@Body() loginUserDto: LoginUserDto){
     return this.authService.login(loginUserDto);
   }
 
   @Get('list-users')
   @Auth(Role.Admin)
+  @ApiOperation({summary: 'List of all registered users'})
   getAllUsers(){
     return this.authService.getAllUsers();
   }
@@ -38,6 +41,7 @@ export class AuthController {
   @Patch(':id')
   @HttpCode(HttpStatus.OK)
   @Auth(Role.Admin)
+  @ApiOperation({summary: 'Change the status of a user or any user data'})
   changeStatusUser(
     @Param('id', ParseIntPipe) id: number,
     @Body() inactivateUserDto: InactivateUserDto,

@@ -1,23 +1,27 @@
-import { IsEmail, IsEnum, IsNotEmpty, IsPhoneNumber } from "class-validator";
-import { doctorsTypes } from "../enums/enums";
+import { ApiProperty } from '@nestjs/swagger';
+import { IsEmail, IsEnum, IsNotEmpty, IsPhoneNumber } from 'class-validator';
+import { doctorsTypes } from '../enums/enums';
 
 export class CreateDoctorDto {
+  @IsNotEmpty()
+  @ApiProperty()
+  name: string;
 
-    @IsNotEmpty()
-    name: string;
+  @IsNotEmpty()
+  @ApiProperty()
+  lastName: string;
 
-    @IsNotEmpty()
-    lastName: string;
+  @IsEmail()
+  @IsNotEmpty()
+  @ApiProperty()
+  email: string;
 
-    @IsEmail()
-    @IsNotEmpty()
-    email: string;
+  @IsNotEmpty()
+  @IsPhoneNumber('DO')
+  @ApiProperty()
+  phone: string;
 
-    @IsNotEmpty()
-    @IsPhoneNumber('DO')
-    phone: string;
-
-    @IsNotEmpty()
-    doctorType: doctorsTypes
-
+  @IsNotEmpty()
+  @ApiProperty()
+  doctorType: doctorsTypes;
 }

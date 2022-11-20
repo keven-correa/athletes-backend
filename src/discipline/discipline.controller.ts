@@ -16,7 +16,7 @@ import { Role } from '../auth/enums/user.roles';
 import { DisciplineService } from './discipline.service';
 import { CreateDisciplineDto } from './dto/create-discipline.dto';
 import { UpdateDisciplineDto } from './dto/update-discipline.dto';
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 
 @ApiTags('Discipline')
 @ApiBearerAuth("Bearer")
@@ -27,6 +27,7 @@ export class DisciplineController {
   @Post()
   @Auth(Role.Admin)
   @HttpCode(HttpStatus.CREATED)
+  @ApiOperation({summary: 'Create a new discipline'})
   create(
     @Body() createDisciplineDto: CreateDisciplineDto,
     @GetUserDecorator() user: User,
@@ -36,18 +37,21 @@ export class DisciplineController {
 
   @Get()
   @Auth(Role.Admin, Role.GeneralystPhysiciann, Role.Physiotherapist, Role.Secretary)
+  @ApiOperation({summary: 'Get all disciplines'})
   findAll() {
     return this.disciplineService.findAll();
   }
 
   @Get(':id')
   @Auth(Role.Admin, Role.GeneralystPhysiciann, Role.Physiotherapist, Role.Secretary)
+  @ApiOperation({summary: 'Get one discipline by id '})
   findOne(@Param('id') id: string) {
     return this.disciplineService.findOne(+id);
   }
 
   @Patch(':id')
   @Auth(Role.Admin)
+  @ApiOperation({summary: 'Update discipline data '})
   update(
     @Param('id') id: number,
     @Body() updateDisciplineDto: UpdateDisciplineDto,
@@ -58,6 +62,7 @@ export class DisciplineController {
 
   @Delete(':id')
   @Auth(Role.Admin)
+  @ApiOperation({summary: 'Delete discipline - THIS ENDPOINT MAY NOT BE PERMANENT '})
   remove(@Param('id') id: string) {
     return this.disciplineService.remove(+id);
   }
