@@ -5,6 +5,7 @@ import { Repository } from 'typeorm';
 import { CreateDisciplineDto } from './dto/create-discipline.dto';
 import { UpdateDisciplineDto } from './dto/update-discipline.dto';
 import { Discipline } from './entities/discipline.entity';
+import { PaginationDto } from '../common/dtos/pagination.dto';
 
 @Injectable()
 export class DisciplineService {
@@ -25,8 +26,12 @@ export class DisciplineService {
     }
   }
 
-  async findAll() {
-    return await this.disciplineRepository.find();
+  async findAll(paginationDto: PaginationDto) {
+    const {limit = 10, offset = 0} = paginationDto
+    return await this.disciplineRepository.find({
+      take: limit,
+      skip: offset,
+    });
   }
 
   async findOne(id: number) {

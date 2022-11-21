@@ -1,6 +1,7 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Req, SetMetadata, HttpCode, HttpStatus, ParseIntPipe } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Req, SetMetadata, HttpCode, HttpStatus, ParseIntPipe, Query } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { PaginationDto } from '../common/dtos/pagination.dto';
 import { AuthService } from './auth.service';
 import { Auth } from './decorators/auth.decorator';
 import { GetUserDecorator } from './decorators/get-user.decorator';
@@ -34,8 +35,8 @@ export class AuthController {
   @Get('list-users')
   @Auth(Role.Admin)
   @ApiOperation({summary: 'List of all registered users'})
-  getAllUsers(){
-    return this.authService.getAllUsers();
+  getAllUsers(@Query() paginationDto: PaginationDto){
+    return this.authService.getAllUsers(paginationDto);
   }
 
   @Patch(':id')

@@ -8,6 +8,7 @@ import { User } from './entities/user.entity';
 import * as bcrypt from 'bcrypt';
 import { JwtPayload } from './interfaces/jwt-payload.interface';
 import { InactivateUserDto } from './dto/inactivate-user.dto';
+import { PaginationDto } from '../common/dtos/pagination.dto';
 
 @Injectable()
 export class AuthService {
@@ -51,8 +52,11 @@ export class AuthService {
     };
   }
 
-  async getAllUsers() {
+  async getAllUsers(paginationDto: PaginationDto) {
+    const {limit = 10, offset = 0} = paginationDto;
     return this.userRepository.find({
+      take: limit,
+      skip: offset,
       relations: ['created_by'],
     });
   }

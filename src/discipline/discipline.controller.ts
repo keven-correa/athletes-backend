@@ -8,6 +8,7 @@ import {
   Delete,
   HttpCode,
   HttpStatus,
+  Query,
 } from '@nestjs/common';
 import { GetUserDecorator } from '../auth/decorators/get-user.decorator';
 import { User } from '../auth/entities/user.entity';
@@ -17,6 +18,7 @@ import { DisciplineService } from './discipline.service';
 import { CreateDisciplineDto } from './dto/create-discipline.dto';
 import { UpdateDisciplineDto } from './dto/update-discipline.dto';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { PaginationDto } from '../common/dtos/pagination.dto';
 
 @ApiTags('Discipline')
 @ApiBearerAuth("Bearer")
@@ -38,8 +40,8 @@ export class DisciplineController {
   @Get()
   @Auth(Role.Admin, Role.GeneralystPhysiciann, Role.Physiotherapist, Role.Secretary)
   @ApiOperation({summary: 'Get all disciplines'})
-  findAll() {
-    return this.disciplineService.findAll();
+  findAll(@Query() paginationDto: PaginationDto) {
+    return this.disciplineService.findAll(paginationDto);
   }
 
   @Get(':id')
@@ -63,7 +65,7 @@ export class DisciplineController {
   @Delete(':id')
   @Auth(Role.Admin)
   @ApiOperation({summary: 'Delete discipline - THIS ENDPOINT MAY NOT BE PERMANENT '})
-  remove(@Param('id') id: string) {
-    return this.disciplineService.remove(+id);
+  remove(@Param('id') id: number) {
+    return this.disciplineService.remove(id);
   }
 }
