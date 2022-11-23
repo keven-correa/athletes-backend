@@ -46,10 +46,11 @@ export class AthletesService {
         throw new BadRequestException();
       }
       await this.athleteRepository.save(newAthlete);
-      delete newAthlete.created_by.password;
-      delete newAthlete.created_by.created_at;
-      delete newAthlete.created_by.updated_at;
-      delete newAthlete.created_by.isActive; 
+      // delete newAthlete.created_by.password;
+      // delete newAthlete.created_by.created_at;
+      // delete newAthlete.created_by.updated_at;
+      // delete newAthlete.created_by.isActive;
+      delete newAthlete.created_by, newAthlete.updated_by;
       return newAthlete;
     } catch (error) {
       this.handleDbException(error);
@@ -58,20 +59,46 @@ export class AthletesService {
 
   async findAll(paginationDto: PaginationDto) {
     const { limit = 10, offset = 0 } = paginationDto;
-    const athletes = await this.athleteRepository.find({
-      take: limit,
-      skip: offset,
-      relations: {
-        discipline: true
-      },
-      loadEagerRelations: true,
-    });
-    
+    // const athletes = await this.athleteRepository.find({
+    //   take: limit,
+    //   skip: offset,
+    //   relations: {
+    //     discipline: true
+    //   },
+    //   select: ["created_by"],
+    //   loadEagerRelations: true,
+    // });
+    const athletes = await this.athleteRepository
+      .createQueryBuilder('athlete')
+      .take(limit)
+      .skip(offset)
+      .leftJoin('athlete.discipline', 'discipline')
+      .addSelect(['discipline.name'])
+      .leftJoin('athlete.created_by', 'createdBy')
+      .addSelect([
+        'createdBy.firstName',
+        'createdBy.lastName',
+        'createdBy.role',
+      ])
+      .getOne();
+
     return athletes;
   }
   async findOne(id: number) {
-    let athlete: Athlete;
-    athlete = await this.athleteRepository.findOneBy({ id: id });
+    
+    const athlete = await this.athleteRepository
+      .createQueryBuilder('athlete')
+      .leftJoin('athlete.discipline', 'discipline')
+      .addSelect(['discipline.name'])
+      .leftJoin('athlete.created_by', 'createdBy')
+      .addSelect([
+        'createdBy.firstName',
+        'createdBy.lastName',
+        'createdBy.role',
+      ])
+      .where("athlete.id = :id", { id: id })
+      .getOne();
+
     if (!athlete) {
       throw new NotFoundException(
         `The Athlete with id: ${id} not found or dosen't exist.`,
@@ -81,7 +108,6 @@ export class AthletesService {
   }
 
   async update(id: number, updateAthleteDto: UpdateAthleteDto, user: User) {
-    
     const getDiscipline = await this.disciplineRepository.findOne({
       where: { id: updateAthleteDto.disciplineId },
     });
@@ -101,7 +127,7 @@ export class AthletesService {
     }
     try {
       await this.athleteRepository.save(athlete);
-      
+
       delete athlete.updated_by.password;
       delete athlete.updated_by.created_at;
       delete athlete.updated_by.updated_at;
@@ -112,30 +138,23 @@ export class AthletesService {
     }
   }
 
-  async inactivate(id: number, inactivaAthleteDto: InactivaAthleteDto, user: User) {
+  async inactivate(
+    id: number,
+    inactivaAthleteDto: InactivaAthleteDto,
+    user: User,
+  ) {
     const athleteExists = this.findOne(id);
     if (!athleteExists)
       throw new NotFoundException(`The athlete with id: ${id} not found.`);
-    await this.athleteRepository.preload({
+    const inactivateAthlete = await this.athleteRepository.preload({
       id: id,
       ...inactivaAthleteDto,
-      created_by: user
+      updated_by: user,
     });
+   
+    await this.athleteRepository.save(inactivateAthlete);
+
   }
-  // async modifyStatus(id: number){
-  //   const athleteExists = this.findOne(id);
-  //   if (!athleteExists)
-  //     throw new NotFoundException(`The athlete with id: ${id} not found.`);
-
-  // }
-
-  // async remove(id: number) {
-  //   const athleteExists = this.findOne(id);
-  //   if (!athleteExists)
-  //     throw new NotFoundException(`The athlete with id: ${id} not found.`);
-  //   await this.athleteRepository.delete(id);
-  //   return 'Deleted';
-  // }
 
   private handleDbException(error: any) {
     this.logger.error(error);

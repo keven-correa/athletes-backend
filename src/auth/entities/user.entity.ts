@@ -55,10 +55,10 @@ export class User {
   updated_at: Date;
 
   @OneToMany(() => Athlete, (athlete) => athlete.created_by)
-  athlete: Athlete;
+  athlete: Athlete[];
 
   @OneToMany(() => Doctor, (doctor) => doctor.created_by)
-  doctor: Doctor
+  doctor: Doctor[]
 
   @OneToMany(() => Doctor, (doctor) => doctor.updated_by)
   doctor_updated_by: Doctor

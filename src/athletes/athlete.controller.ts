@@ -23,6 +23,7 @@ import { Role } from '../auth/enums/user.roles';
 import { GetUserDecorator } from '../auth/decorators/get-user.decorator';
 import { User } from '../auth/entities/user.entity';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { InactivaAthleteDto } from './dto/inactivate-athlete.dto';
 
 @ApiTags('Athletes')
 @ApiBearerAuth("Bearer")
@@ -69,12 +70,12 @@ export class AthleteController {
     return this.athletesService.update(id, updateAthleteDto, user);
   }
 
-  // @Patch(':id')
-  // @HttpCode(HttpStatus.OK)
-  // @Auth(Role.Admin)
-  // inactivateUser(@Param('id', ParseIntPipe) id: number, @Body() inactivateAthleteDto: InactivaAthleteDto, @GetUserDecorator() user: User){
-  //   return this.athletesService.inactivate(id, inactivateAthleteDto, user)
-  // }
+  @Patch(':id')
+  @HttpCode(HttpStatus.OK)
+  @Auth(Role.Admin)
+  inactivateUser(@Param('id', ParseIntPipe) id: number, @Body() inactivateAthleteDto: InactivaAthleteDto, @GetUserDecorator() user: User){
+    return this.athletesService.inactivate(id, inactivateAthleteDto, user)
+  }
   // @Delete(':id')
   // @HttpCode(HttpStatus.NO_CONTENT)
   // remove(@Param('id', ParseIntPipe) id: number) {
