@@ -17,30 +17,36 @@ export class DoctorService {
 
   async create(createDoctorDto: CreateDoctorDto, user: User) {
     try {
-      const doctor =  this.doctorRepository.create({
+      const doctor = this.doctorRepository.create({
         ...createDoctorDto,
-        created_by: user
+        created_by: user,
       });
       await this.doctorRepository.save(doctor);
       return doctor;
-    } catch (error) {
-      
-    }
+    } catch (error) {}
   }
 
   async findAll(paginationDto: PaginationDto) {
-   const {limit = 10, offset = 0} = paginationDto;
-   return await this.doctorRepository.find({
-    take: limit,
-    skip: offset
-   });
+    const { limit = 10, offset = 0 } = paginationDto;
+    const doctors = await this.doctorRepository
+      .createQueryBuilder('doctor')
+      .take(limit)
+      .offset(offset)
+      .leftJoin('doctor.created_by', 'createdBy')
+      .addSelect([
+        'createdBy.firstName',
+        'createdBy.lastName',
+        'createdBy.role',
+      ])
+      .getMany();
+      return doctors;
   }
 
   async findOne(id: number) {
     let doctor: Doctor;
-    doctor = await this.doctorRepository.findOneBy({id: id});
-    if(!doctor){
-      throw new NotFoundException(`The doctor with id: ${id} not exists.`)
+    doctor = await this.doctorRepository.findOneBy({ id: id });
+    if (!doctor) {
+      throw new NotFoundException(`The doctor with id: ${id} not exists.`);
     }
     return doctor;
   }
@@ -49,7 +55,7 @@ export class DoctorService {
     const athlete = await this.doctorRepository.preload({
       id: id,
       ...updateDoctorDto,
-      updated_by: user
+      updated_by: user,
     });
     if (!athlete) {
       throw new NotFoundException(`The doctor with id: ${id} not found.`);
@@ -63,14 +69,14 @@ export class DoctorService {
   }
 
   async remove(id: number) {
-      const doctorExists = this.doctorRepository.findOneBy({id: id});
-      if(!doctorExists){
-        throw new NotFoundException(`The doctor with id: ${id} not found.`);
-      }
-      try {
-        return await this.doctorRepository.delete(id);
-      } catch (error) {
-        this.logger.error(error);
-      }
+    const doctorExists = this.doctorRepository.findOneBy({ id: id });
+    if (!doctorExists) {
+      throw new NotFoundException(`The doctor with id: ${id} not found.`);
+    }
+    try {
+      return await this.doctorRepository.delete(id);
+    } catch (error) {
+      this.logger.error(error);
+    }
   }
 }

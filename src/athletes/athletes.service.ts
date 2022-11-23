@@ -46,10 +46,7 @@ export class AthletesService {
         throw new BadRequestException();
       }
       await this.athleteRepository.save(newAthlete);
-      // delete newAthlete.created_by.password;
-      // delete newAthlete.created_by.created_at;
-      // delete newAthlete.created_by.updated_at;
-      // delete newAthlete.created_by.isActive;
+
       delete newAthlete.created_by, newAthlete.updated_by;
       return newAthlete;
     } catch (error) {
