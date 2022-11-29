@@ -1,6 +1,7 @@
 import { Athlete } from '../../athletes/entities/athlete.entity';
-import { Doctor } from '../../doctor/entities/doctor.entity';
+// import { Doctor } from '../../doctor/entities/doctor.entity';
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { User } from '../../auth/entities/user.entity';
 
 @Entity('Appointments')
 export class Appointment {
@@ -19,6 +20,9 @@ export class Appointment {
   @ManyToOne(() => Athlete, (athlete) => athlete.appointments)
   athlete: Athlete;
 
-  @ManyToOne(() => Doctor, (doctor) => doctor.appointments)
-  doctor: Doctor;
+  @ManyToOne(() => User, (user) => user.appointments)
+  user: User;
+  //change to user
+  // @ManyToOne(() => Doctor, (doctor) => doctor.appointments)
+  // doctor: Doctor;
 }

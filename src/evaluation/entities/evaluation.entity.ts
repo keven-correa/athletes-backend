@@ -1,4 +1,5 @@
-import { Doctor } from '../../doctor/entities/doctor.entity';
+// import { Doctor } from '../../doctor/entities/doctor.entity';
+import { User } from '../../auth/entities/user.entity';
 import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { Athlete } from '../../athletes/entities/athlete.entity';
 
@@ -24,9 +25,10 @@ export class Evaluation {
 
   @Column('varchar')
   remarks: string;
-
-  @ManyToOne(() => Doctor, (doctorEvaluation) => doctorEvaluation.evaluations)
-  doctor: Doctor;
+  
+  //change to user
+  // @ManyToOne(() => Doctor, (doctorEvaluation) => doctorEvaluation.evaluations)
+  // doctor: Doctor;
 
   @CreateDateColumn({
     type: 'timestamp',
@@ -40,6 +42,9 @@ export class Evaluation {
   })
   updated_at: Date;
 
+  @ManyToOne(() => User, (user) => user.evaluations)
+  user: User
+  
   @ManyToOne(
     () => Athlete,
     (athleteEvaluation) => athleteEvaluation.evaluations,

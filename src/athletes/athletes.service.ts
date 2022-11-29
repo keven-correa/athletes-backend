@@ -17,7 +17,7 @@ import { InactivaAthleteDto } from './dto/inactivate-athlete.dto';
 
 @Injectable()
 export class AthletesService {
-  private readonly logger = new Logger('AthleteService');
+  private readonly logger = new Logger('AthleteService'); 
 
   constructor(
     @InjectRepository(Athlete)
@@ -47,8 +47,8 @@ export class AthletesService {
       }
       await this.athleteRepository.save(newAthlete);
 
-      delete newAthlete.created_by, newAthlete.updated_by;
-      return newAthlete;
+      // delete newAthlete.created_by, newAthlete.updated_by;
+      return this.athleteRepository.findOneBy({id: newAthlete.id});
     } catch (error) {
       this.handleDbException(error);
     }

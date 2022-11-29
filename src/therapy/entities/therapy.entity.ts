@@ -5,7 +5,8 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { Doctor } from '../../doctor/entities/doctor.entity';
+import { User } from '../../auth/entities/user.entity';
+// import { Doctor } from '../../doctor/entities/doctor.entity';
 
 @Entity('Therapies')
 export class Therapy {
@@ -15,8 +16,9 @@ export class Therapy {
   @ManyToOne(() => Athlete, (athlete) => athlete.therapies)
   athlete: Athlete;
 
-  @ManyToOne(() => Doctor, (doctor) => doctor.therapies)
-  doctor: Doctor;
+  //change to user
+  // @ManyToOne(() => Doctor, (doctor) => doctor.therapies)
+  // doctor: Doctor;
 
   @CreateDateColumn({
     type: 'timestamp',
@@ -29,4 +31,7 @@ export class Therapy {
     default: () => 'CURRENT_TIMESTAMP(6)',
   })
   updated_at: Date;
+
+  @ManyToOne(() => User, (user) => user.therapies)
+  user: User
 }

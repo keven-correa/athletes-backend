@@ -11,7 +11,10 @@ import {
 } from 'typeorm';
 import { Role } from '../enums/user.roles';
 import { Discipline } from '../../discipline/entities/discipline.entity';
-import { Doctor } from '../../doctor/entities/doctor.entity';
+// import { Doctor } from '../../doctor/entities/doctor.entity';
+import { Appointment } from '../../appointment/entities/appointment.entity';
+import { Therapy } from '../../therapy/entities/therapy.entity';
+import { Evaluation } from '../../evaluation/entities/evaluation.entity';
 
 @Entity('Users')
 export class User {
@@ -57,19 +60,27 @@ export class User {
   @OneToMany(() => Athlete, (athlete) => athlete.created_by)
   athlete: Athlete[];
 
-  @OneToMany(() => Doctor, (doctor) => doctor.created_by)
-  doctor: Doctor[]
+  @OneToMany(() => Appointment, (appointment) => appointment.user)
+  appointments: Appointment[];
+  // @OneToMany(() => Doctor, (doctor) => doctor.created_by)
+  // doctor: Doctor[]
 
-  @OneToMany(() => Doctor, (doctor) => doctor.updated_by)
-  doctor_updated_by: Doctor
+  // @OneToMany(() => Doctor, (doctor) => doctor.updated_by)
+  // doctor_updated_by: Doctor
 
   @OneToMany(() => Discipline, (discipline) => discipline.created_by)
   discipline: Discipline
 
-  @ManyToOne((type) => User, (user) => user.users)
+  @ManyToOne(() => User, (user) => user.users)
   created_by: User
 
-  @OneToMany((user) => User, (user) => user.created_by)
-  @JoinColumn()
+  @JoinColumn({ name: 'created_by' })
+  @OneToMany(() => User, (user) => user.created_by)
   users: User[];
+
+  @OneToMany(() => Therapy, (therapy) => therapy.user)
+  therapies?: Therapy[];
+
+  @OneToMany(() => Evaluation, (evaluation) => evaluation.user)
+  evaluations?: Evaluation[];
 }
