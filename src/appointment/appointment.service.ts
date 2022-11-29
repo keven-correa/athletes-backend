@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { CreateAppointmentDto } from './dto/create-appointment.dto';
 import { UpdateAppointmentDto } from './dto/update-appointment.dto';
 
+///TODO: Add Logic here and services
 @Injectable()
 export class AppointmentService {
   create(createAppointmentDto: CreateAppointmentDto) {

@@ -7,10 +7,18 @@ import { AppModule } from './app.module';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.setGlobalPrefix('api');
-  const config = new DocumentBuilder()  
+  app.enableCors();
+  const config = new DocumentBuilder()
     .setDescription('Athletes Management API')
     .setVersion('1.0')
-    .addBearerAuth({ type: 'http', schema: 'Bearer', bearerFormat: 'Token' } as SecuritySchemeObject, 'Bearer')
+    .addBearerAuth(
+      {
+        type: 'http',
+        schema: 'Bearer',
+        bearerFormat: 'Token',
+      } as SecuritySchemeObject,
+      'Bearer',
+    )
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);

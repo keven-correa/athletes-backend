@@ -1,9 +1,18 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+} from '@nestjs/common';
 import { EvaluationService } from './evaluation.service';
 import { CreateEvaluationDto } from './dto/create-evaluation.dto';
 import { UpdateEvaluationDto } from './dto/update-evaluation.dto';
 import { ApiTags } from '@nestjs/swagger';
 
+//TODO create endpoints for manage Evaluations
 @ApiTags('Evaluation')
 @Controller('evaluation')
 export class EvaluationController {
@@ -25,7 +34,10 @@ export class EvaluationController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateEvaluationDto: UpdateEvaluationDto) {
+  update(
+    @Param('id') id: string,
+    @Body() updateEvaluationDto: UpdateEvaluationDto,
+  ) {
     return this.evaluationService.update(+id, updateEvaluationDto);
   }
 
