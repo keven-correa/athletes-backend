@@ -77,7 +77,7 @@ export class AthletesService {
         'createdBy.lastName',
         'createdBy.role',
       ])
-      .getOne();
+      .getMany();
 
     return athletes;
   }

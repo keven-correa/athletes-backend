@@ -2,6 +2,7 @@ import { ApiProperty } from "@nestjs/swagger";
 import { IsEmail, IsEnum, IsOptional, IsString, Matches, MaxLength, MinLength } from "class-validator";
 import { Role } from "../enums/user.roles";
 
+//TODO: create a dto class for each user type (Secretary | Admin | Physician | Physiotherapist) TO BE DEFINED!
 export class CreateUserDto {
     @IsString()
     @IsEmail()

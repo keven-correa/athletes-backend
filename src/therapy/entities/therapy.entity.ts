@@ -2,6 +2,7 @@ import { Athlete } from '../../athletes/entities/athlete.entity';
 import {
   CreateDateColumn,
   Entity,
+  JoinColumn,
   ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
@@ -32,6 +33,7 @@ export class Therapy {
   })
   updated_at: Date;
 
+  @JoinColumn({ name: 'created_by' })
   @ManyToOne(() => User, (user) => user.therapies)
-  user: User
+  created_by: User
 }

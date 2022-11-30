@@ -1,6 +1,5 @@
 import { IsInt, IsNotEmpty, IsOptional, MaxLength } from 'class-validator';
 
-//TODO: create a dto class for each user type (Secretary | Admin | Physician | Physiotherapist)
 export class CreateAppointmentDto {
   @IsNotEmpty()
   @MaxLength(200)
@@ -19,5 +18,5 @@ export class CreateAppointmentDto {
   athlete: number;
 
   @IsInt()
-  doctor: number;
+  assigned_to: number;
 }

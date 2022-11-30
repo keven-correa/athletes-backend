@@ -1,6 +1,6 @@
 // import { Doctor } from '../../doctor/entities/doctor.entity';
 import { User } from '../../auth/entities/user.entity';
-import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { Athlete } from '../../athletes/entities/athlete.entity';
 
 @Entity('Evaluations')
@@ -42,8 +42,9 @@ export class Evaluation {
   })
   updated_at: Date;
 
+  @JoinColumn({ name: 'created_by' })
   @ManyToOne(() => User, (user) => user.evaluations)
-  user: User
+  created_by: User
   
   @ManyToOne(
     () => Athlete,

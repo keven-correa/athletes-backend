@@ -60,8 +60,11 @@ export class User {
   @OneToMany(() => Athlete, (athlete) => athlete.created_by)
   athlete: Athlete[];
 
-  @OneToMany(() => Appointment, (appointment) => appointment.user)
+  @OneToMany(() => Appointment, (appointment) => appointment.created_by)
   appointments: Appointment[];
+
+  @OneToMany(() => Appointment, (assing) => assing.assigned_to)
+  assing_appointment: Appointment[];
   // @OneToMany(() => Doctor, (doctor) => doctor.created_by)
   // doctor: Doctor[]
 
@@ -71,16 +74,16 @@ export class User {
   @OneToMany(() => Discipline, (discipline) => discipline.created_by)
   discipline: Discipline
 
+  @JoinColumn({ name: 'created_by' })
   @ManyToOne(() => User, (user) => user.users)
   created_by: User
 
-  @JoinColumn({ name: 'created_by' })
   @OneToMany(() => User, (user) => user.created_by)
   users: User[];
 
-  @OneToMany(() => Therapy, (therapy) => therapy.user)
+  @OneToMany(() => Therapy, (therapy) => therapy.created_by)
   therapies?: Therapy[];
 
-  @OneToMany(() => Evaluation, (evaluation) => evaluation.user)
+  @OneToMany(() => Evaluation, (evaluation) => evaluation.created_by)
   evaluations?: Evaluation[];
 }

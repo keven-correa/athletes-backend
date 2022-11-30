@@ -53,12 +53,24 @@ export class AuthService {
   }
 
   async getAllUsers(paginationDto: PaginationDto) {
-    const {limit = 10, offset = 0} = paginationDto;
+    const { limit = 10, offset = 0 } = paginationDto;
     return this.userRepository.find({
       take: limit,
       skip: offset,
       relations: ['created_by'],
     });
+  }
+
+  async getUserPhysicianById(id: number) {
+    const physician =  this.userRepository
+      .createQueryBuilder('user')
+      .where('user.id =:id', {
+        id: id,
+      })
+      .andWhere('user.role = :role', {
+        role: 'MedicoGeneral',
+      }).getOne();
+      return physician;
   }
 
   async inactivateUser(id: number, inactivateUserDto: InactivateUserDto) {

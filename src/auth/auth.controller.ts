@@ -38,6 +38,10 @@ export class AuthController {
   getAllUsers(@Query() paginationDto: PaginationDto){
     return this.authService.getAllUsers(paginationDto);
   }
+  @Get('get-physician/:id')
+  getUserPhysicianById(@Param('id', ParseIntPipe) id: number){
+    return this.authService.getUserPhysicianById(id);
+  }
 
   @Patch(':id')
   @HttpCode(HttpStatus.OK)
