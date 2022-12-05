@@ -54,7 +54,7 @@ export class AuthService {
 
   async getAllUsers(paginationDto: PaginationDto) {
     const { limit = 10, offset = 0 } = paginationDto;
-    return this.userRepository.find({
+    return await this.userRepository.find({
       take: limit,
       skip: offset,
       relations: ['created_by'],
@@ -62,15 +62,35 @@ export class AuthService {
   }
 
   async getUserPhysicianById(id: number) {
-    const physician =  this.userRepository
+    const physician = await this.userRepository
       .createQueryBuilder('user')
       .where('user.id =:id', {
         id: id,
       })
       .andWhere('user.role = :role', {
         role: 'MedicoGeneral',
-      }).getOne();
-      return physician;
+      })
+      .andWhere('user.isActive = :isActive', {
+        isActive: true,
+      })
+      .getOne();
+    return physician;
+  }
+
+  async getUserPhysiotherapistById(id: number) {
+    const physiotherapist = await this.userRepository
+      .createQueryBuilder('user')
+      .where('user.id =:id', {
+        id: id,
+      })
+      .andWhere('user.role = :role', {
+        role: 'Fisioterapeuta',
+      })
+      .andWhere('user.isActive = :isActive', {
+        isActive: true,
+      })
+      .getOne();
+    return physiotherapist;
   }
 
   async inactivateUser(id: number, inactivateUserDto: InactivateUserDto) {

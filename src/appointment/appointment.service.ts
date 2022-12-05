@@ -1,5 +1,6 @@
 import {
   BadRequestException,
+  HttpStatus,
   Inject,
   Injectable,
   NotFoundException,
@@ -12,7 +13,6 @@ import { UpdateAppointmentDto } from './dto/update-appointment.dto';
 import { Appointment } from './entities/appointment.entity';
 import { AthletesService } from '../athletes/athletes.service';
 import { User } from '../auth/entities/user.entity';
-
 
 @Injectable()
 export class AppointmentService {
@@ -54,11 +54,11 @@ export class AppointmentService {
       .addSelect(['discipline.name'])
       .leftJoin('appointment.assigned_to', 'assigned')
       .addSelect(['assigned.firstName', 'assigned.lastName', 'assigned.role'])
+      .orderBy('appointment.id', 'ASC')
       .getMany();
   }
 
   async findOne(id: number) {
-    // return  this.appointmentRepository.findOne({where: {id: id}, relations: ['athlete', 'assigned_to']})
     return await this.appointmentRepository
       .createQueryBuilder('appointment')
       .leftJoin('appointment.athlete', 'athlete')
@@ -69,11 +69,25 @@ export class AppointmentService {
       .getOne();
   }
 
-  update(id: number, updateAppointmentDto: UpdateAppointmentDto) {
-    return `This action updates a #${id} appointment`;
+  async update(id: number, updateAppointmentDto: UpdateAppointmentDto) {
+    const assingTo = await this.authService.getUserPhysicianById(
+      updateAppointmentDto.assigned_to,
+    );
+    const athleteTo = await this.athleteService.findOne(
+      updateAppointmentDto.athlete,
+    );
+    if (!assingTo || !athleteTo) throw new NotFoundException();
+    const appointment = await this.appointmentRepository.preload({
+      id: id,
+      ...updateAppointmentDto,
+      assigned_to: assingTo,
+      athlete: athleteTo,
+    });
+    this.appointmentRepository.save(appointment);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} appointment`;
+  async remove(id: number) {
+    const deleteAppointment = await this.appointmentRepository.delete(id);
+    return deleteAppointment;
   }
 }
