@@ -24,7 +24,7 @@ export class AppointmentService {
     @Inject(AthletesService)
     private readonly athleteService: AthletesService,
   ) {}
-  async create(createAppointmentDto: CreateAppointmentDto) {
+  async create(createAppointmentDto: CreateAppointmentDto, createdBy: User) {
     const assingTo = await this.authService.getUserPhysicianById(
       createAppointmentDto.assigned_to,
     );
@@ -37,6 +37,7 @@ export class AppointmentService {
       ...createAppointmentDto,
       athlete: athleteTo,
       assigned_to: assingTo,
+      created_by: createdBy,
     });
     if (!appointment.assigned_to || !appointment.athlete)
       throw new BadRequestException();
@@ -63,6 +64,8 @@ export class AppointmentService {
       .createQueryBuilder('appointment')
       .leftJoin('appointment.athlete', 'athlete')
       .addSelect(['athlete.name', 'athlete.lastName'])
+      .leftJoin('athlete.discipline', 'discipline')
+      .addSelect(['discipline.name'])
       .leftJoin('appointment.assigned_to', 'assigned')
       .addSelect(['assigned.firstName', 'assigned.lastName', 'assigned.role'])
       .where('appointment.id =:id', { id: id })

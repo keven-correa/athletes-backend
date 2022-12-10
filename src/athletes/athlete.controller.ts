@@ -34,7 +34,7 @@ export class AthleteController {
   @Post()
   @Auth(Role.Secretary, Role.Admin)
   @HttpCode(HttpStatus.CREATED)
-  @ApiOperation({summary: 'create a new Athlete'})
+  @ApiOperation({summary: 'Create a new Athlete'})
   async create(
     @Body() createAthleteDto: CreateAthleteDto,
     @GetUserDecorator() user: User,
@@ -45,7 +45,7 @@ export class AthleteController {
   @Get()
   @Auth(Role.Secretary, Role.Admin)
   @HttpCode(HttpStatus.OK)
-  @ApiOperation({summary: 'Get all Athletes'})
+  @ApiOperation({summary: 'Retrieve a list of athletes'})
   findAll(@Query() paginationDto: PaginationDto) {
     return this.athletesService.findAll(paginationDto);
   }
@@ -53,7 +53,7 @@ export class AthleteController {
   @Get(':id')
   @Auth(Role.Secretary, Role.Admin)
   @HttpCode(HttpStatus.OK)
-  @ApiOperation({summary: 'Get one Athlete by id'})
+  @ApiOperation({summary: 'Get data of athlete by id'})
   findOne(@Param('id', ParseIntPipe) id: number) {
     return this.athletesService.findOne(id);
   }
@@ -61,7 +61,7 @@ export class AthleteController {
   @Patch(':id')
   @HttpCode(HttpStatus.OK)
   @Auth(Role.Secretary, Role.Admin)
-  @ApiOperation({summary: 'update an Athlete'})
+  @ApiOperation({summary: 'update data of athlete'})
   update(
     @Param('id', ParseIntPipe) id: number,
     @Body() updateAthleteDto: UpdateAthleteDto,
@@ -70,12 +70,12 @@ export class AthleteController {
     return this.athletesService.update(id, updateAthleteDto, user);
   }
 
-  @Patch(':id')
-  @HttpCode(HttpStatus.OK)
-  @Auth(Role.Admin)
-  inactivateUser(@Param('id', ParseIntPipe) id: number, @Body() inactivateAthleteDto: InactivaAthleteDto, @GetUserDecorator() user: User){
-    return this.athletesService.inactivate(id, inactivateAthleteDto, user)
-  }
+  // @Patch(':id')
+  // @HttpCode(HttpStatus.OK)
+  // @Auth(Role.Admin)
+  // inactivateUser(@Param('id', ParseIntPipe) id: number, @Body() inactivateAthleteDto: InactivaAthleteDto, @GetUserDecorator() user: User){
+  //   return this.athletesService.inactivate(id, inactivateAthleteDto, user)
+  // }
   // @Delete(':id')
   // @HttpCode(HttpStatus.NO_CONTENT)
   // remove(@Param('id', ParseIntPipe) id: number) {
