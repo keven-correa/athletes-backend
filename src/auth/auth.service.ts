@@ -52,12 +52,14 @@ export class AuthService {
     };
   }
 
+  //TODO Modify query
   async getAllUsers(paginationDto: PaginationDto) {
     const { limit = 10, offset = 0 } = paginationDto;
     return await this.userRepository.find({
       take: limit,
       skip: offset,
       relations: ['created_by'],
+      cache: 4500
     });
   }
 

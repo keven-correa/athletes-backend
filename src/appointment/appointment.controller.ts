@@ -5,6 +5,8 @@ import { GetUserDecorator } from '../auth/decorators/get-user.decorator';
 import { AppointmentService } from './appointment.service';
 import { CreateAppointmentDto } from './dto/create-appointment.dto';
 import { UpdateAppointmentDto } from './dto/update-appointment.dto';
+import { Auth } from '../auth/decorators/auth.decorator';
+import { Role } from '../auth/enums/user.roles';
 
 @ApiTags('Appointment')
 @Controller('appointment')
@@ -12,6 +14,7 @@ export class AppointmentController {
   constructor(private readonly appointmentService: AppointmentService) {}
 
   @Post()
+  @Auth(Role.Admin)
   @ApiOperation({summary: 'Create a new appointment'})
   create(@Body() createAppointmentDto: CreateAppointmentDto, @GetUserDecorator() createdBy: User) {
     return this.appointmentService.create(createAppointmentDto, createdBy);

@@ -78,7 +78,7 @@ export class AthletesService {
         'createdBy.role',
       ])
       .orderBy('athlete.id', 'ASC')
-      .cache(2000)
+      .cache(4500)
       .getMany();
 
     return athletes;

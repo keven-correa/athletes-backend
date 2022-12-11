@@ -14,6 +14,7 @@ import { Appointment } from './entities/appointment.entity';
 import { AthletesService } from '../athletes/athletes.service';
 import { User } from '../auth/entities/user.entity';
 
+
 @Injectable()
 export class AppointmentService {
   constructor(
@@ -24,6 +25,8 @@ export class AppointmentService {
     @Inject(AthletesService)
     private readonly athleteService: AthletesService,
   ) {}
+
+  
   async create(createAppointmentDto: CreateAppointmentDto, createdBy: User) {
     const assingTo = await this.authService.getUserPhysicianById(
       createAppointmentDto.assigned_to,
@@ -55,7 +58,10 @@ export class AppointmentService {
       .addSelect(['discipline.name'])
       .leftJoin('appointment.assigned_to', 'assigned')
       .addSelect(['assigned.firstName', 'assigned.lastName', 'assigned.role'])
+      .leftJoin('appointment.created_by', 'created')
+      .addSelect(['created.firstName', 'created.lastName', 'created.role'])
       .orderBy('appointment.id', 'ASC')
+      .cache(4500)
       .getMany();
   }
 
@@ -68,6 +74,8 @@ export class AppointmentService {
       .addSelect(['discipline.name'])
       .leftJoin('appointment.assigned_to', 'assigned')
       .addSelect(['assigned.firstName', 'assigned.lastName', 'assigned.role'])
+      .leftJoin('appointment.created_by', 'created')
+      .addSelect(['created.firstName', 'created.lastName', 'created.role'])
       .where('appointment.id =:id', { id: id })
       .getOne();
   }

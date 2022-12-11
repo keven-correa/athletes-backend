@@ -31,6 +31,7 @@ export class DisciplineService {
     return await this.disciplineRepository.find({
       take: limit,
       skip: offset,
+      cache: 3200
     });
   }
 
