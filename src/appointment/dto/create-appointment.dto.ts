@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsInt, IsNotEmpty, IsOptional, MaxLength } from 'class-validator';
+import { IsEnum, IsInt, IsNotEmpty, IsOptional, MaxLength } from 'class-validator';
+import { PriorityLevel } from '../enums/enum.appointment';
 
 export class CreateAppointmentDto {
   @IsNotEmpty()
@@ -17,6 +18,11 @@ export class CreateAppointmentDto {
   @IsOptional()
   @ApiProperty()
   notes?: string;
+
+  @IsEnum(PriorityLevel)
+  @IsNotEmpty()
+  @ApiProperty()
+  priority: PriorityLevel;
 
   @IsInt()
   @ApiProperty()

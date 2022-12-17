@@ -15,6 +15,7 @@ export enum BloodType {
     O_NEGATIVE = 'O-'
 }
 
+//TODO: ELIMINAR
 export enum PatientType {
     Athlete = 'Atleta',
     Trainer = 'Entrenador',
@@ -26,5 +27,6 @@ export enum LevelOfSchooling {
     Basic = 'Basico',
     Medium = 'Medio',
     University = 'Universitario'
+    //No estudia 
 }
 
