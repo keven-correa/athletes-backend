@@ -1,4 +1,10 @@
-import { HttpCode, HttpException, HttpStatus, Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+  HttpCode,
+  HttpException,
+  HttpStatus,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -18,17 +24,19 @@ export class AuthService {
     private readonly jwtService: JwtService,
   ) {}
   async create(createUserDto: CreateUserDto, user: User) {
-
     const foundUser = await this.userRepository.findOne({
       where: {
-        email: createUserDto.email
-      }
+        email: createUserDto.email,
+      },
     });
 
-    if(foundUser){
-      throw new HttpException('A user with this email already exists. Please enter another one.', HttpStatus.CONFLICT);
+    if (foundUser) {
+      throw new HttpException(
+        'A user with this email already exists. Please enter another one.',
+        HttpStatus.CONFLICT,
+      );
     }
-    
+
     const { password, ...userData } = createUserDto;
     const userCreate = this.userRepository.create({
       ...userData,
@@ -68,7 +76,7 @@ export class AuthService {
       take: limit,
       skip: offset,
       relations: ['created_by'],
-      cache: 4500
+      cache: 4500,
     });
   }
 
@@ -87,6 +95,7 @@ export class AuthService {
       .getOne();
     return physician;
   }
+
 
   async getUserPhysiotherapistById(id: number) {
     const physiotherapist = await this.userRepository

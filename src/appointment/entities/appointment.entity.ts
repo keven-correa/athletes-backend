@@ -1,5 +1,4 @@
 import { Athlete } from '../../athletes/entities/athlete.entity';
-// import { Doctor } from '../../doctor/entities/doctor.entity';
 import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { User } from '../../auth/entities/user.entity';
 import { PriorityLevel } from '../enums/enum.appointment';

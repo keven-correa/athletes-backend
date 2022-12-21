@@ -7,6 +7,7 @@ import {
   JoinColumn,
   ManyToOne,
   PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 import { Athlete } from '../../athletes/entities/athlete.entity';
 
@@ -28,7 +29,7 @@ export class Evaluation {
   painLevel: number;
 
   @Column('int')
-  quantity: number;
+  numberOfTherapies: number;
 
   @Column('varchar')
   remarks: string;
@@ -39,7 +40,7 @@ export class Evaluation {
   })
   created_at: Date;
 
-  @CreateDateColumn({
+  @UpdateDateColumn({
     type: 'timestamp',
     default: () => 'CURRENT_TIMESTAMP(6)',
   })

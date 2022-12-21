@@ -17,6 +17,6 @@ import { AuthModule } from '../auth/auth.module';
     TypeOrmModule.forFeature([Athlete, Appointment, Therapy]),
     AuthModule
   ],
-  exports: [TypeOrmModule, AthletesService]
+  exports: [AthletesService]
 })
 export class AthleteModule {}
