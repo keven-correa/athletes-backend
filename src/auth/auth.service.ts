@@ -1,4 +1,4 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { HttpCode, HttpException, HttpStatus, Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -18,6 +18,17 @@ export class AuthService {
     private readonly jwtService: JwtService,
   ) {}
   async create(createUserDto: CreateUserDto, user: User) {
+
+    const foundUser = await this.userRepository.findOne({
+      where: {
+        email: createUserDto.email
+      }
+    });
+
+    if(foundUser){
+      throw new HttpException('A user with this email already exists. Please enter another one.', HttpStatus.CONFLICT);
+    }
+    
     const { password, ...userData } = createUserDto;
     const userCreate = this.userRepository.create({
       ...userData,
@@ -29,7 +40,6 @@ export class AuthService {
     delete userCreate.isActive;
     return {
       ...userCreate,
-      // created,
       token: this.getJwtToken({ id: userCreate.id }),
     };
   }
@@ -52,7 +62,6 @@ export class AuthService {
     };
   }
 
-  //TODO Modify query
   async getAllUsers(paginationDto: PaginationDto) {
     const { limit = 10, offset = 0 } = paginationDto;
     return await this.userRepository.find({

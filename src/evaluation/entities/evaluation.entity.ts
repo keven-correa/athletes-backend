@@ -1,6 +1,13 @@
 // import { Doctor } from '../../doctor/entities/doctor.entity';
 import { User } from '../../auth/entities/user.entity';
-import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { Athlete } from '../../athletes/entities/athlete.entity';
 
 @Entity('Evaluations')
@@ -25,10 +32,6 @@ export class Evaluation {
 
   @Column('varchar')
   remarks: string;
-  
-  //change to user
-  // @ManyToOne(() => Doctor, (doctorEvaluation) => doctorEvaluation.evaluations)
-  // doctor: Doctor;
 
   @CreateDateColumn({
     type: 'timestamp',
@@ -44,8 +47,12 @@ export class Evaluation {
 
   @JoinColumn({ name: 'created_by' })
   @ManyToOne(() => User, (user) => user.evaluations)
-  created_by: User
-  
+  created_by: User;
+
+  @JoinColumn({ name: 'assigned_to' })
+  @ManyToOne(() => User, (assingned) => assingned.assing_evaluation)
+  assigned_to: User;
+
   @ManyToOne(
     () => Athlete,
     (athleteEvaluation) => athleteEvaluation.evaluations,

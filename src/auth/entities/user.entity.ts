@@ -65,11 +65,6 @@ export class User {
 
   @OneToMany(() => Appointment, (assing) => assing.assigned_to)
   assing_appointment: Appointment[];
-  // @OneToMany(() => Doctor, (doctor) => doctor.created_by)
-  // doctor: Doctor[]
-
-  // @OneToMany(() => Doctor, (doctor) => doctor.updated_by)
-  // doctor_updated_by: Doctor
 
   @OneToMany(() => Discipline, (discipline) => discipline.created_by)
   discipline: Discipline
@@ -86,4 +81,7 @@ export class User {
 
   @OneToMany(() => Evaluation, (evaluation) => evaluation.created_by)
   evaluations?: Evaluation[];
+
+  @OneToMany(() => Evaluation, (assing) => assing.assigned_to)
+  assing_evaluation: Evaluation[];
 }

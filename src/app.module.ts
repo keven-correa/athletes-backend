@@ -23,6 +23,7 @@ import { DisciplineService } from './discipline/discipline.service';
       password: process.env.DB_PASSWORD,
       autoLoadEntities: true,
       synchronize: true,
+      // logging: true
     }),
     AthleteModule,
     CommonModule,

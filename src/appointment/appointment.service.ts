@@ -14,7 +14,6 @@ import { Appointment } from './entities/appointment.entity';
 import { AthletesService } from '../athletes/athletes.service';
 import { User } from '../auth/entities/user.entity';
 
-
 @Injectable()
 export class AppointmentService {
   constructor(
@@ -26,7 +25,6 @@ export class AppointmentService {
     private readonly athleteService: AthletesService,
   ) {}
 
-  
   async create(createAppointmentDto: CreateAppointmentDto, createdBy: User) {
     const assingTo = await this.authService.getUserPhysicianById(
       createAppointmentDto.assigned_to,
@@ -39,7 +37,7 @@ export class AppointmentService {
     const appointment = this.appointmentRepository.create({
       ...createAppointmentDto,
       athlete: athleteTo,
-      assigned_to: assingTo,
+      assigned_to: assingTo, 
       created_by: createdBy,
     });
     if (!appointment.assigned_to || !appointment.athlete)
