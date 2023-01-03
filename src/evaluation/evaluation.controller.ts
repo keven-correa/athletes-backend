@@ -24,7 +24,7 @@ export class EvaluationController {
   constructor(private readonly evaluationService: EvaluationService) {}
 
   @Post()
-  @Auth(Role.Admin, Role.Physiotherapist, Role.GeneralystPhysiciann)
+  @Auth(Role.Admin, Role.Physiotherapist)
   @HttpCode(201)
   @ApiOperation({summary: 'Create new evaluation'})
   create(@Body() createEvaluationDto: CreateEvaluationDto, @GetUserDecorator() user: User ) {
@@ -33,6 +33,7 @@ export class EvaluationController {
 
   @Get()
   @Auth(Role.Admin, Role.Physiotherapist)
+  @HttpCode(200)
   @ApiOperation({summary: 'Retrieve a list of all Evaluations'})
   findAll() {
     return this.evaluationService.findAll();

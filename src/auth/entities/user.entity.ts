@@ -82,6 +82,6 @@ export class User {
   @OneToMany(() => Evaluation, (evaluation) => evaluation.created_by)
   evaluations?: Evaluation[];
 
-  @OneToMany(() => Evaluation, (assing) => assing.assigned_to)
-  assing_evaluation: Evaluation[];
+  // @OneToMany(() => Evaluation, (assing) => assing.assigned_to)
+  // assing_evaluation: Evaluation[];
 }

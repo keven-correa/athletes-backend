@@ -25,17 +25,18 @@ export class EvaluationService {
     private readonly athleteService: AthletesService,
   ) {}
   async create(createEvaluationDto: CreateEvaluationDto, user: User) {
-    const assingADoctor = await this.authService.getUserPhysiotherapistById(
-      createEvaluationDto.assigned_to,
-    );
+    // const assingADoctor = await this.authService.getUserPhysiotherapistById(
+    //   createEvaluationDto.assigned_to,
+    // );
     const athlete = await this.athleteService.findOne(
       createEvaluationDto.athlete,
     );
-    if (!assingADoctor) {
-      throw new NotFoundException(
-        `Doctor with id: ${createEvaluationDto.assigned_to} not found!`,
-      );
-    } else if (!athlete) {
+    // if (!assingADoctor) {
+    //   throw new NotFoundException(
+    //     `Doctor with id: ${createEvaluationDto.assigned_to} not found!`,
+    //   );
+    // }
+    if (!athlete) {
       throw new NotFoundException(
         `Athlete with id: ${createEvaluationDto.athlete} not found!`,
       );
@@ -44,11 +45,11 @@ export class EvaluationService {
       ...createEvaluationDto,
       created_by: user,
       athlete: athlete,
-      assigned_to: assingADoctor,
+      // assigned_to: assingADoctor,
     });
     await this.evaluationRepository.save(createEvaluation);
-    if (!createEvaluation.assigned_to) throw new BadRequestException();
-    else if (!createEvaluation.athlete) throw new BadRequestException();
+    // if (!createEvaluation.assigned_to) throw new BadRequestException();
+    if (!createEvaluation.athlete) throw new BadRequestException();
     return await this.evaluationRepository.findOneBy({
       id: createEvaluation.id,
     });
@@ -58,15 +59,33 @@ export class EvaluationService {
     return await this.evaluationRepository.find();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} evaluation`;
+  async findOne(id: number) {
+    const athlete = await this.evaluationRepository.findOneBy({ id: id });
+    if (!athlete) throw new NotFoundException();
+    return athlete;
   }
 
-  update(id: number, updateEvaluationDto: UpdateEvaluationDto) {
-    return `This action updates a #${id} evaluation`;
+  async update(id: number, updateEvaluationDto: UpdateEvaluationDto) {
+    const athlete = await this.athleteService.findOne(
+      updateEvaluationDto.athlete,
+    )
+    if (!athlete) {
+      throw new NotFoundException(
+        `Athlete with id: ${updateEvaluationDto.athlete} not found!`,
+      );
+    }
+
+    const evaluation = await this.evaluationRepository.preload({
+      id: id,
+      ...updateEvaluationDto,
+      athlete: athlete
+    });
+
+    return evaluation;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} evaluation`;
+  async remove(id: number) {
+    const deleteEvaluation = await this.evaluationRepository.delete(id);
+    return deleteEvaluation;
   }
 }

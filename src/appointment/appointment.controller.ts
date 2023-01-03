@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, ParseIntPipe } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { User } from '../auth/entities/user.entity';
 import { GetUserDecorator } from '../auth/decorators/get-user.decorator';
@@ -28,8 +28,13 @@ export class AppointmentController {
 
   @Get(':id')
   @ApiOperation({summary: 'Get one appointment by id'})
-  findOne(@Param('id') id: string) {
-    return this.appointmentService.findOne(+id);
+  findOne(@Param('id', ParseIntPipe) id: number) {
+    return this.appointmentService.findOne(id);
+  }
+
+  @Get('get-appointments-by-athlete/:id')
+  findAllByAthlete(@Param('id', ParseIntPipe) id: number){
+    return this.appointmentService.getAppointmentsByAthleteId(id);
   }
 
   @Patch(':id')

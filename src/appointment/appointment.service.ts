@@ -12,6 +12,7 @@ import { UpdateAppointmentDto } from './dto/update-appointment.dto';
 import { Appointment } from './entities/appointment.entity';
 import { AthletesService } from '../athletes/athletes.service';
 import { User } from '../auth/entities/user.entity';
+import { Athlete } from '../athletes/entities/athlete.entity';
 
 @Injectable()
 export class AppointmentService {
@@ -36,7 +37,7 @@ export class AppointmentService {
     const appointment = this.appointmentRepository.create({
       ...createAppointmentDto,
       athlete: athleteTo,
-      assigned_to: assingTo, 
+      assigned_to: assingTo,
       created_by: createdBy,
     });
     if (!appointment.assigned_to || !appointment.athlete)
@@ -92,6 +93,20 @@ export class AppointmentService {
       athlete: athleteTo,
     });
     this.appointmentRepository.save(appointment);
+  }
+
+  async getAppointmentsByAthleteId(id: number) {
+    const validateAthlete = await this.athleteService.findOne(id);
+
+    const appointments = await this.appointmentRepository
+      .createQueryBuilder('appointments')
+      .leftJoin('appointments.assigned_to', 'assigned')
+      .addSelect(['assigned.firstName', 'assigned.lastName', 'assigned.role'])
+      .leftJoin('appointments.created_by', 'created')
+      .addSelect(['created.firstName', 'created.lastName', 'created.role'])
+      .where('appointments.athleteId =:id', { id: validateAthlete.id })
+      .getMany();
+    return appointments;
   }
 
   async remove(id: number) {

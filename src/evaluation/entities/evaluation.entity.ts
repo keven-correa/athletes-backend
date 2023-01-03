@@ -50,9 +50,9 @@ export class Evaluation {
   @ManyToOne(() => User, (user) => user.evaluations)
   created_by: User;
 
-  @JoinColumn({ name: 'assigned_to' })
-  @ManyToOne(() => User, (assingned) => assingned.assing_evaluation)
-  assigned_to: User;
+  // @JoinColumn({ name: 'assigned_to' })
+  // @ManyToOne(() => User, (assingned) => assingned.assing_evaluation)
+  // assigned_to: User;
 
   @ManyToOne(
     () => Athlete,

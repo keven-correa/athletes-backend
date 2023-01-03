@@ -30,10 +30,10 @@ export class CreateEvaluationDto {
     @IsInt()
     numberOfTherapies?: number
 
-    @ApiProperty()
-    @IsNotEmpty()
-    @IsInt()
-    assigned_to: number;
+    // @ApiProperty()
+    // @IsNotEmpty()
+    // @IsInt()
+    // assigned_to: number;
 
     @ApiProperty()
     @IsNotEmpty()
