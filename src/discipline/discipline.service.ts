@@ -6,6 +6,7 @@ import { CreateDisciplineDto } from './dto/create-discipline.dto';
 import { UpdateDisciplineDto } from './dto/update-discipline.dto';
 import { Discipline } from './entities/discipline.entity';
 import { PaginationDto } from '../common/dtos/pagination.dto';
+import { NotFoundException } from '@nestjs/common/exceptions';
 
 @Injectable()
 export class DisciplineService {
@@ -36,7 +37,9 @@ export class DisciplineService {
   }
 
   async findOne(id: number) {
-    return await this.disciplineRepository.findOneBy({ id: id });
+    const discipline = await this.disciplineRepository.findOneBy({ id: id });
+    if(!discipline) throw new NotFoundException();
+    return discipline;
   }
 
   async update(id: number, updateDisciplineDto: UpdateDisciplineDto, user: User) {

@@ -3,6 +3,7 @@ import {
   HttpException,
   HttpStatus,
   Injectable,
+  NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
@@ -81,6 +82,8 @@ export class AuthService {
   }
 
   async getUserPhysicianById(id: number) {
+    const find = await this.userRepository.findOneBy({id: id});
+    if(!find) throw new NotFoundException(`Physician with id: ${id} not found!`);
     const physician = await this.userRepository
       .createQueryBuilder('user')
       .where('user.id =:id', {
@@ -98,6 +101,8 @@ export class AuthService {
 
 
   async getUserPhysiotherapistById(id: number) {
+    const find = await this.userRepository.findOneBy({id: id});
+    if(!find) throw new NotFoundException(`Therapist with id: ${id} not found!`);
     const physiotherapist = await this.userRepository
       .createQueryBuilder('user')
       .where('user.id =:id', {
@@ -114,6 +119,8 @@ export class AuthService {
   }
 
   async inactivateUser(id: number, inactivateUserDto: InactivateUserDto) {
+    const find = await this.userRepository.findOneBy({id: id});
+    if(!find) throw new NotFoundException(`User with id: ${id} not found!`);
     const inactivate = await this.userRepository.preload({
       id: id,
       ...inactivateUserDto,
@@ -122,6 +129,11 @@ export class AuthService {
     return inactivate;
   }
 
+  // private async validateExistence(id: number){
+  //   const find = await this.userRepository.findOneBy({id: id});
+  //   if(!find) throw new NotFoundException();
+  //   return find;
+  // }
   private getJwtToken(payload: JwtPayload) {
     return this.jwtService.sign(payload);
   }
