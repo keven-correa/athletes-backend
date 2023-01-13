@@ -48,7 +48,7 @@ export class EvaluationController {
 
   @Patch(':id')
   @Auth(Role.Physiotherapist, Role.GeneralystPhysiciann)
-  @ApiOperation({summary: 'Not implemented 🛑🚧'})
+  @ApiOperation({summary: 'Update evaluation'})
   update(
     @Param('id') id: string,
     @Body() updateEvaluationDto: UpdateEvaluationDto,
@@ -58,7 +58,7 @@ export class EvaluationController {
 
   @Delete(':id')
   @Auth(Role.Physiotherapist, Role.GeneralystPhysiciann)
-  @ApiOperation({summary: 'Not implemented 🛑🚧'})
+  @ApiOperation({summary: 'Delete evaluation'})
   remove(@Param('id') id: string) {
     return this.evaluationService.remove(+id);
   }
