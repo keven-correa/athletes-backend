@@ -14,13 +14,6 @@ export class Therapy {
   @PrimaryGeneratedColumn('increment')
   id: number;
 
-  @ManyToOne(() => Athlete, (athlete) => athlete.therapies)
-  athlete: Athlete;
-
-  //change to user
-  // @ManyToOne(() => Doctor, (doctor) => doctor.therapies)
-  // doctor: Doctor;
-
   @CreateDateColumn({
     type: 'timestamp',
     default: () => 'CURRENT_TIMESTAMP(6)',
@@ -33,7 +26,13 @@ export class Therapy {
   })
   updated_at: Date;
 
+  @ManyToOne(() => User, (therapist) => therapist.therapies)
+  therapist: User;
+
+  @ManyToOne(() => Athlete, (athlete) => athlete.therapies)
+  athlete: Athlete;
+
   @JoinColumn({ name: 'created_by' })
   @ManyToOne(() => User, (user) => user.therapies)
-  created_by: User
+  created_by: User;
 }
