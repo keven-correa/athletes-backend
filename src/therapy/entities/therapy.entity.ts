@@ -1,5 +1,6 @@
 import { Athlete } from '../../athletes/entities/athlete.entity';
 import {
+  Column,
   CreateDateColumn,
   Entity,
   JoinColumn,
@@ -25,6 +26,12 @@ export class Therapy {
     default: () => 'CURRENT_TIMESTAMP(6)',
   })
   updated_at: Date;
+
+  @Column({nullable: true, type: 'text'})
+  remarks: string
+
+  @Column({nullable: false, type: 'timestamptz'})
+  schedulingDate: Date
 
   @ManyToOne(() => User, (therapist) => therapist.therapies)
   therapist: User;
