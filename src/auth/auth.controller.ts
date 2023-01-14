@@ -27,7 +27,7 @@ import { LoginUserDto } from './dto/login-user.dto';
 import { User } from './entities/user.entity';
 import { Role } from './enums/user.roles';
 
-@ApiTags('Authentication')
+@ApiTags('Authentication and users management')
 @ApiBearerAuth('Bearer')
 @Controller('auth')
 export class AuthController {
