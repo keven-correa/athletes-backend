@@ -24,13 +24,14 @@ export class TherapyController {
   constructor(private readonly therapyService: TherapyService) {}
 
   @Post()
-  @Auth(Role.Admin)
+  @Auth(Role.Admin, Role.Physiotherapist, Role.Secretary)
   @ApiOperation({summary: 'create new therapy'})
   create(@Body() createTherapyDto: CreateTherapyDto, @GetUserDecorator() user: User) {
     return this.therapyService.create(createTherapyDto, user);
   }
 
   @Get()
+  // @Auth(Role.Admin, Role.Physiotherapist, Role.Secretary)
   @ApiOperation({summary: 'Get all therapies'})
   findAll() {
     return this.therapyService.findAll();

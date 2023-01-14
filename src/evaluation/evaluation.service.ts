@@ -31,11 +31,6 @@ export class EvaluationService {
     const athlete = await this.athleteService.findOne(
       createEvaluationDto.athlete,
     );
-    // if (!assingADoctor) {
-    //   throw new NotFoundException(
-    //     `Doctor with id: ${createEvaluationDto.assigned_to} not found!`,
-    //   );
-    // }
     if (!athlete) {
       throw new NotFoundException(
         `Athlete with id: ${createEvaluationDto.athlete} not found!`,

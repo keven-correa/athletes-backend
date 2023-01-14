@@ -26,7 +26,6 @@ import { InactivateUserDto } from './dto/inactivate-user.dto';
 import { LoginUserDto } from './dto/login-user.dto';
 import { User } from './entities/user.entity';
 import { Role } from './enums/user.roles';
-import { UserRoleGuard } from './guards/user-role.guard';
 
 @ApiTags('Authentication')
 @ApiBearerAuth('Bearer')
@@ -53,6 +52,22 @@ export class AuthController {
   getAllUsers(@Query() paginationDto: PaginationDto) {
     return this.authService.getAllUsers(paginationDto);
   }
+
+  @Get('get-all-physicians')
+  getAllPhysicians(){
+    return this.authService.getAllPhysicians();
+  }
+
+  @Get('get-all-physiotherapists')
+  getAllPhysiotherapist(){
+    return this.authService.getAllPhysioTherapist();
+  }
+
+  @Get('get-all-secretaries')
+  getAllSecretaries(){
+    return this.authService.getAllSecretaries();
+  }
+
   @Get('get-physician/:id')
   getUserPhysicianById(@Param('id', ParseIntPipe) id: number) {
     return this.authService.getUserPhysicianById(id);

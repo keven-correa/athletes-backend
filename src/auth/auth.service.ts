@@ -72,18 +72,49 @@ export class AuthService {
   }
 
   async getAllUsers(paginationDto: PaginationDto) {
-    const { limit = 10, offset = 0 } = paginationDto;
+    // const { limit = 10, offset = 0 } = paginationDto;
     return await this.userRepository.find({
-      take: limit,
-      skip: offset,
+      // take: limit,
+      // skip: offset,
       relations: ['created_by'],
       cache: 4500,
     });
   }
 
+  async getAllPhysicians() {
+    const physicians = await this.userRepository
+      .createQueryBuilder('physicians')
+      .where('physicians.role = :role', {
+        role: 'MedicoGeneral',
+      })
+      .getMany();
+      return physicians;
+  }
+
+  async getAllPhysioTherapist() {
+    const physioTherapists = await this.userRepository
+    .createQueryBuilder('terapist')
+    .where('terapist.role = :role', {
+      role: 'Fisioterapeuta',
+    })
+    .getMany();
+    return physioTherapists;
+  }
+
+  async getAllSecretaries() {
+    const secretaries = await this.userRepository
+    .createQueryBuilder('secretary')
+    .where('secretary.role = :role', {
+      role: 'Secretary',
+    })
+    .getMany();
+    return secretaries;
+  }
+
   async getUserPhysicianById(id: number) {
-    const find = await this.userRepository.findOneBy({id: id});
-    if(!find) throw new NotFoundException(`Physician with id: ${id} not found!`);
+    const find = await this.userRepository.findOneBy({ id: id });
+    if (!find)
+      throw new NotFoundException(`Physician with id: ${id} not found!`);
     const physician = await this.userRepository
       .createQueryBuilder('user')
       .where('user.id =:id', {
@@ -99,10 +130,10 @@ export class AuthService {
     return physician;
   }
 
-
   async getUserPhysiotherapistById(id: number) {
-    const find = await this.userRepository.findOneBy({id: id});
-    if(!find) throw new NotFoundException(`Therapist with id: ${id} not found!`);
+    const find = await this.userRepository.findOneBy({ id: id });
+    if (!find)
+      throw new NotFoundException(`Therapist with id: ${id} not found!`);
     const physiotherapist = await this.userRepository
       .createQueryBuilder('user')
       .where('user.id =:id', {
@@ -119,8 +150,8 @@ export class AuthService {
   }
 
   async inactivateUser(id: number, inactivateUserDto: InactivateUserDto) {
-    const find = await this.userRepository.findOneBy({id: id});
-    if(!find) throw new NotFoundException(`User with id: ${id} not found!`);
+    const find = await this.userRepository.findOneBy({ id: id });
+    if (!find) throw new NotFoundException(`User with id: ${id} not found!`);
     const inactivate = await this.userRepository.preload({
       id: id,
       ...inactivateUserDto,
@@ -129,11 +160,6 @@ export class AuthService {
     return inactivate;
   }
 
-  // private async validateExistence(id: number){
-  //   const find = await this.userRepository.findOneBy({id: id});
-  //   if(!find) throw new NotFoundException();
-  //   return find;
-  // }
   private getJwtToken(payload: JwtPayload) {
     return this.jwtService.sign(payload);
   }

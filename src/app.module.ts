@@ -4,7 +4,6 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AthleteModule } from './athletes/athletes.module';
 import { CommonModule } from './common/common.module';
 import { AuthModule } from './auth/auth.module';
-import { DoctorModule } from './doctor/doctor.module';
 import { AppointmentModule } from './appointment/appointment.module';
 import { TherapyModule } from './therapy/therapy.module';
 import { EvaluationModule } from './evaluation/evaluation.module';
@@ -28,7 +27,6 @@ import { DisciplineService } from './discipline/discipline.service';
     AthleteModule,
     CommonModule,
     AuthModule,
-    DoctorModule,
     AppointmentModule,
     TherapyModule,
     EvaluationModule,
