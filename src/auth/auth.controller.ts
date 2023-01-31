@@ -13,6 +13,7 @@ import {
   HttpStatus,
   ParseIntPipe,
   Query,
+  Request,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
@@ -20,7 +21,6 @@ import { PaginationDto } from '../common/dtos/pagination.dto';
 import { AuthService } from './auth.service';
 import { Auth } from './decorators/auth.decorator';
 import { GetUserDecorator } from './decorators/get-user.decorator';
-import { RoleProtected } from './decorators/role-protected.decorator';
 import { CreateUserDto } from './dto/create-user.dto';
 import { InactivateUserDto } from './dto/inactivate-user.dto';
 import { LoginUserDto } from './dto/login-user.dto';

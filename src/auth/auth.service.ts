@@ -1,5 +1,4 @@
 import {
-  HttpCode,
   HttpException,
   HttpStatus,
   Injectable,
@@ -24,6 +23,12 @@ export class AuthService {
     private readonly userRepository: Repository<User>,
     private readonly jwtService: JwtService,
   ) {}
+  /**
+   * 
+   * @param {CreateUserDto} createUserDto 
+   * @param {User} user 
+   * @returns user created
+   */
   async create(createUserDto: CreateUserDto, user: User) {
     const foundUser = await this.userRepository.findOne({
       where: {
@@ -39,7 +44,7 @@ export class AuthService {
     }
 
     const { password, ...userData } = createUserDto;
-    const userCreate = this.userRepository.create({
+    const userCreate =  this.userRepository.create({
       ...userData,
       password: bcrypt.hashSync(password, 10),
       created_by: user,
