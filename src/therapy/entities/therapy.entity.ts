@@ -8,6 +8,7 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { User } from '../../auth/entities/user.entity';
+import { Status } from '../enums/enum.therapy';
 // import { Doctor } from '../../doctor/entities/doctor.entity';
 
 @Entity('Therapies')
@@ -27,12 +28,15 @@ export class Therapy {
   })
   updated_at: Date;
 
-  @Column({nullable: true, type: 'text'})
-  remarks: string
+  @Column({ nullable: true, type: 'text' })
+  remarks: string;
 
-  @Column({nullable: false, type: 'timestamptz'})
-  schedulingDate: Date
+  @Column({ nullable: false, type: 'timestamptz' })
+  schedulingDate: Date;
 
+  @Column({ type: 'enum', enum: Status, default: Status.Active })
+  status: Status;
+  
   @ManyToOne(() => User, (therapist) => therapist.therapies)
   therapist: User;
 

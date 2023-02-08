@@ -5,7 +5,6 @@ export class CreateTherapyDto {
     @MaxLength(255)
     remarks?: string
 
-    // @IsDate()
     @IsNotEmpty()
     schedulingDate: Date
 
@@ -16,4 +15,6 @@ export class CreateTherapyDto {
     @IsNotEmpty()
     @IsInt()
     athlete: number
+
+
 }

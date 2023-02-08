@@ -19,6 +19,7 @@ export class TherapyService {
     @InjectRepository(Therapy)
     private readonly therapyRepository: Repository<Therapy>,
   ) {}
+
   async create(createTherapyDto: CreateTherapyDto, createdBy: User) {
     const [therapist, athlete] = await Promise.all([
       this.authService.getUserPhysiotherapistById(createTherapyDto.therapist),
@@ -41,18 +42,31 @@ export class TherapyService {
   }
 
   async findOne(id: number) {
-    const findTherapy = await this.therapyRepository.findOneBy({id: id});
-    if(!findTherapy) {
+    const findTherapy = await this.therapyRepository.findOneBy({ id: id });
+    if (!findTherapy) {
       throw new NotFoundException();
-    }else{
+    } else {
       return findTherapy;
     }
-    
   }
 
-  // update(id: number, updateTherapyDto: UpdateTherapyDto) {
-  //   return `This action updates a #${id} therapy`;
-  // }
+  async update(id: number, updateTherapyDto: UpdateTherapyDto) {
+    const therapy = await this.findOne(id);
+    if(!therapy) throw new NotFoundException(`there is no therapy with the id: ${id}`)
+    
+    const [therapist, athlete] = await Promise.all([
+      this.authService.getUserPhysiotherapistById(updateTherapyDto.therapist),
+      this.athleteService.findOne(updateTherapyDto.athlete),
+    ]);
+    const updateTherapy = await this.therapyRepository.preload({
+      id: id,
+      ...updateTherapyDto,
+      athlete: athlete,
+      therapist: therapist
+    })
+    await this.therapyRepository.save(updateTherapy);
+    return updateTherapy;
+  }
 
   // remove(id: number) {
   //   return `This action removes a #${id} therapy`;

@@ -43,11 +43,11 @@ export class TherapyController {
     return this.therapyService.findOne(id);
   }
   // TODO: ?????
-  // @Patch(':id')
-  // @ApiOperation({summary: 'Not implemented 🛑🚧'})
-  // update(@Param('id') id: string, @Body() updateTherapyDto: UpdateTherapyDto) {
-  //   return this.therapyService.update(+id, updateTherapyDto);
-  // }
+  @Patch(':id')
+  @ApiOperation({summary: 'Modifies therapy information'})
+  update(@Param('id', ParseIntPipe) id: number, @Body() updateTherapyDto: UpdateTherapyDto) {
+    return this.therapyService.update(id, updateTherapyDto);
+  }
 
   // @Delete(':id')
   // @ApiOperation({summary: 'Not implemented 🛑🚧'})
