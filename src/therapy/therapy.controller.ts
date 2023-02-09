@@ -5,8 +5,8 @@ import {
   Body,
   Patch,
   Param,
-  Delete,
   ParseIntPipe,
+  UseInterceptors,
 } from '@nestjs/common';
 import { TherapyService } from './therapy.service';
 import { CreateTherapyDto } from './dto/create-therapy.dto';
@@ -16,8 +16,8 @@ import { GetUserDecorator } from '../auth/decorators/get-user.decorator';
 import { User } from '../auth/entities/user.entity';
 import { Auth } from '../auth/decorators/auth.decorator';
 import { Role } from '../auth/enums/user.roles';
+import { TimeoutInterceptor } from '../common/interceptors/timeout.interceptor';
 
-//TODO create endpoints for manage Therapies
 @ApiTags('Therapy')
 @Controller('therapy')
 export class TherapyController {
@@ -42,13 +42,13 @@ export class TherapyController {
   findOne(@Param('id', ParseIntPipe) id: number) {
     return this.therapyService.findOne(id);
   }
-  // TODO: ?????
+
   @Patch(':id')
   @ApiOperation({summary: 'Modifies therapy information'})
   update(@Param('id', ParseIntPipe) id: number, @Body() updateTherapyDto: UpdateTherapyDto) {
     return this.therapyService.update(id, updateTherapyDto);
   }
-
+  
   // @Delete(':id')
   // @ApiOperation({summary: 'Not implemented 🛑🚧'})
   // remove(@Param('id') id: string) {

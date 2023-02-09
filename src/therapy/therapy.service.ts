@@ -38,7 +38,7 @@ export class TherapyService {
   }
 
   async findAll() {
-    return await this.therapyRepository.find();
+    return await this.therapyRepository.find({ cache: 4000 });
   }
 
   async findOne(id: number) {
@@ -52,8 +52,9 @@ export class TherapyService {
 
   async update(id: number, updateTherapyDto: UpdateTherapyDto) {
     const therapy = await this.findOne(id);
-    if(!therapy) throw new NotFoundException(`there is no therapy with the id: ${id}`)
-    
+    if (!therapy)
+      throw new NotFoundException(`there is no therapy with the id: ${id}`);
+
     const [therapist, athlete] = await Promise.all([
       this.authService.getUserPhysiotherapistById(updateTherapyDto.therapist),
       this.athleteService.findOne(updateTherapyDto.athlete),
@@ -62,13 +63,9 @@ export class TherapyService {
       id: id,
       ...updateTherapyDto,
       athlete: athlete,
-      therapist: therapist
-    })
+      therapist: therapist,
+    });
     await this.therapyRepository.save(updateTherapy);
     return updateTherapy;
   }
-
-  // remove(id: number) {
-  //   return `This action removes a #${id} therapy`;
-  // }
 }

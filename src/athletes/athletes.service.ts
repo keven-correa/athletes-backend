@@ -17,7 +17,7 @@ import { InactivaAthleteDto } from './dto/inactivate-athlete.dto';
 
 @Injectable()
 export class AthletesService {
-  private readonly logger = new Logger('AthleteService'); 
+  private readonly logger = new Logger('AthleteService');
 
   constructor(
     @InjectRepository(Athlete)
@@ -48,7 +48,7 @@ export class AthletesService {
       await this.athleteRepository.save(newAthlete);
 
       // delete newAthlete.created_by, newAthlete.updated_by;
-      return this.athleteRepository.findOneBy({id: newAthlete.id});
+      return this.athleteRepository.findOneBy({ id: newAthlete.id });
     } catch (error) {
       this.handleDbException(error);
     }
@@ -84,7 +84,6 @@ export class AthletesService {
     return athletes;
   }
   async findOne(id: number) {
-    
     const athlete = await this.athleteRepository
       .createQueryBuilder('athlete')
       .leftJoin('athlete.discipline', 'discipline')
@@ -95,7 +94,7 @@ export class AthletesService {
         'createdBy.lastName',
         'createdBy.role',
       ])
-      .where("athlete.id = :id", { id: id })
+      .where('athlete.id = :id', { id: id })
       .getOne();
 
     if (!athlete) {
@@ -150,9 +149,8 @@ export class AthletesService {
       ...inactivaAthleteDto,
       updated_by: user,
     });
-   
-    await this.athleteRepository.save(inactivateAthlete);
 
+    await this.athleteRepository.save(inactivateAthlete);
   }
 
   private handleDbException(error: any) {

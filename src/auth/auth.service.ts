@@ -23,12 +23,7 @@ export class AuthService {
     private readonly userRepository: Repository<User>,
     private readonly jwtService: JwtService,
   ) {}
-  /**
-   * 
-   * @param {CreateUserDto} createUserDto 
-   * @param {User} user 
-   * @returns user created
-   */
+
   async create(createUserDto: CreateUserDto, user: User) {
     const foundUser = await this.userRepository.findOne({
       where: {
@@ -44,7 +39,7 @@ export class AuthService {
     }
 
     const { password, ...userData } = createUserDto;
-    const userCreate =  this.userRepository.create({
+    const userCreate = this.userRepository.create({
       ...userData,
       password: bcrypt.hashSync(password, 10),
       created_by: user,
@@ -93,26 +88,26 @@ export class AuthService {
         role: 'MedicoGeneral',
       })
       .getMany();
-      return physicians;
+    return physicians;
   }
 
   async getAllPhysioTherapist() {
     const physioTherapists = await this.userRepository
-    .createQueryBuilder('terapist')
-    .where('terapist.role = :role', {
-      role: 'Fisioterapeuta',
-    })
-    .getMany();
+      .createQueryBuilder('terapist')
+      .where('terapist.role = :role', {
+        role: 'Fisioterapeuta',
+      })
+      .getMany();
     return physioTherapists;
   }
 
   async getAllSecretaries() {
     const secretaries = await this.userRepository
-    .createQueryBuilder('secretary')
-    .where('secretary.role = :role', {
-      role: 'Secretary',
-    })
-    .getMany();
+      .createQueryBuilder('secretary')
+      .where('secretary.role = :role', {
+        role: 'Secretary',
+      })
+      .getMany();
     return secretaries;
   }
 

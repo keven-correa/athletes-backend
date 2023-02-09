@@ -2,7 +2,6 @@ import { ApiProperty } from '@nestjs/swagger';
 import { IsEnum, IsInt, IsNotEmpty, IsOptional, MaxLength } from 'class-validator';
 import { Status } from '../enums/enum.therapy'
 
-
 export class UpdateTherapyDto{
     @IsOptional()
     @ApiProperty()
