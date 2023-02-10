@@ -49,9 +49,4 @@ export class TherapyController {
     return this.therapyService.update(id, updateTherapyDto);
   }
   
-  // @Delete(':id')
-  // @ApiOperation({summary: 'Not implemented 🛑🚧'})
-  // remove(@Param('id') id: string) {
-  //   return this.therapyService.remove(+id);
-  // }
 }

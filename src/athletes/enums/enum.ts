@@ -15,13 +15,18 @@ export enum BloodType {
     O_NEGATIVE = 'O-'
 }
 
-//TODO: ELIMINAR
-export enum PatientType {
-    Athlete = 'Atleta',
-    Trainer = 'Entrenador',
-    Employee = 'Empleado',
-    External = 'Externo'
+export enum Gender {
+    Male = 'Masculino',
+    Female  = 'Femenino'
 }
+
+//TODO: ELIMINAR
+// export enum PatientType {
+//     Athlete = 'Atleta',
+//     Trainer = 'Entrenador',
+//     Employee = 'Empleado',
+//     External = 'Externo'
+// }
 
 export enum LevelOfSchooling {
     Basic = 'Basico',

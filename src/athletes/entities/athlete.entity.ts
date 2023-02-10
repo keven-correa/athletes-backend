@@ -10,9 +10,10 @@ import {
 } from 'typeorm';
 import {
   BloodType,
+  Gender,
   LevelOfSchooling,
   MaritalStatus,
-  PatientType,
+  
 } from '../enums/enum';
 import { Therapy } from '../../therapy/entities/therapy.entity';
 import { Evaluation } from '../../evaluation/entities/evaluation.entity';
@@ -68,6 +69,45 @@ export class Athlete {
 
   @Column('bool', { default: true })
   isActive: boolean;
+
+  @Column('varchar', {nullable: true})
+  birthPlace: string;
+
+  @Column({type: 'enum', enum: Gender, nullable: true})
+  gender: Gender;
+
+  @Column('varchar', {nullable: true})
+  modality: string;
+
+  @Column('varchar', {nullable: true})
+  sportAge: string
+
+  @Column('varchar', {nullable: true})
+  practiceHours: string
+
+  @Column('varchar', {nullable: true})
+  practiceDays: string
+
+  @Column('varchar', {nullable: true})
+  medicalInsurance: string
+
+  @Column('varchar', {nullable: true})
+  studyHours: string
+
+  @Column('varchar', {nullable: true})
+  studyDays: string
+
+  @Column('varchar', {nullable: true})
+  TA: string
+
+  @Column('varchar', {nullable: true})
+  FC: string
+
+  @Column('varchar', {nullable: true})
+  FR: string
+
+  @Column('varchar', {nullable: true})
+  temperature: string
 
   @OneToMany(
     () => Appointment,
