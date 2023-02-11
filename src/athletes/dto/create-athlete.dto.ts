@@ -4,6 +4,7 @@ import {
   IsBoolean,
   IsDate,
   IsEnum,
+  IsInt,
   IsMobilePhone,
   IsNotEmpty,
   IsOptional,
@@ -109,7 +110,8 @@ export class CreateAthleteDto {
 
   @ApiProperty()
   @IsOptional()
-  practiceHours: string;
+  @IsInt()
+  practiceHours: number;
 
   @IsOptional()
   @ApiProperty()
@@ -120,8 +122,9 @@ export class CreateAthleteDto {
   medicalInsurance: string;
 
   @IsOptional()
+  @IsInt()
   @ApiProperty()
-  studyHours: string;
+  studyHours: number;
 
   @IsOptional()
   @ApiProperty()

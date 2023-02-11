@@ -69,21 +69,18 @@ export class Athlete {
 
   @Column('bool', { default: true })
   isActive: boolean;
-
+  // new
   @Column('varchar', {nullable: true})
   birthPlace: string;
 
   @Column({type: 'enum', enum: Gender, nullable: true})
   gender: Gender;
 
-  @Column('varchar', {nullable: true})
-  modality: string;
+  @Column('date', {nullable: true})
+  sportAge: Date
 
-  @Column('varchar', {nullable: true})
-  sportAge: string
-
-  @Column('varchar', {nullable: true})
-  practiceHours: string
+  @Column('int', {nullable: true})
+  practiceHours: number;
 
   @Column('varchar', {nullable: true})
   practiceDays: string
@@ -91,8 +88,8 @@ export class Athlete {
   @Column('varchar', {nullable: true})
   medicalInsurance: string
 
-  @Column('varchar', {nullable: true})
-  studyHours: string
+  @Column('int', {nullable: true})
+  studyHours: number
 
   @Column('varchar', {nullable: true})
   studyDays: string
@@ -106,8 +103,8 @@ export class Athlete {
   @Column('varchar', {nullable: true})
   FR: string
 
-  @Column('varchar', {nullable: true})
-  temperature: string
+  // @Column('varchar', {nullable: true})
+  // temperature: string
 
   @OneToMany(
     () => Appointment,
