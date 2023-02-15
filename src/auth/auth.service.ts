@@ -73,12 +73,24 @@ export class AuthService {
 
   async getAllUsers(paginationDto: PaginationDto) {
     // const { limit = 10, offset = 0 } = paginationDto;
-    return await this.userRepository.find({
-      // take: limit,
-      // skip: offset,
-      relations: ['created_by'],
-      cache: 4500,
-    });
+    // return await this.userRepository.find({
+    //   take: limit,
+    //   skip: offset,
+    //   relations: ['created_by'],
+    //   order: {
+    //     id: 'ASC',
+    //   },
+    //   cache: 4500,
+
+    // });
+    const userList = await this.userRepository
+      .createQueryBuilder('user')
+      .leftJoin('user.created_by', 'created')
+      .addSelect(['created.firstName', 'created.lastName', 'created.role'])
+      .orderBy('user.id', 'ASC')
+      .getMany();
+
+      return userList;
   }
 
   async getAllPhysicians() {

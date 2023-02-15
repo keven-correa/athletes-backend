@@ -47,7 +47,6 @@ export class AthletesService {
       }
       await this.athleteRepository.save(newAthlete);
 
-      // delete newAthlete.created_by, newAthlete.updated_by;
       return this.athleteRepository.findOneBy({ id: newAthlete.id });
     } catch (error) {
       this.handleDbException(error);
@@ -56,28 +55,15 @@ export class AthletesService {
 
   async findAll(paginationDto: PaginationDto) {
     const { limit = 10, offset = 0 } = paginationDto;
-    // const athletes = await this.athleteRepository.find({
-    //   take: limit,
-    //   skip: offset,
-    //   relations: {
-    //     discipline: true
-    //   },
-    //   select: ["created_by"],
-    //   loadEagerRelations: true,
-    // });
     const athletes = await this.athleteRepository
       .createQueryBuilder('athlete')
-      .take(limit)
-      .skip(offset)
+      // .take(limit)
+      // .skip(offset)
       .leftJoin('athlete.discipline', 'discipline')
       .addSelect(['discipline.name'])
-      .leftJoin('athlete.created_by', 'createdBy')
-      .addSelect([
-        'createdBy.firstName',
-        'createdBy.lastName',
-        'createdBy.role',
-      ])
-      .orderBy('athlete.id', 'ASC')
+      .leftJoin('athlete.created_by', 'created')
+      .addSelect(['created_by.firstName', 'created_by.lastName', 'created_by.role'])
+      .orderBy('athlete.id', 'DESC')
       .cache(4500)
       .getMany();
 

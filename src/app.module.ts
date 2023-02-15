@@ -9,7 +9,6 @@ import { TherapyModule } from './therapy/therapy.module';
 import { EvaluationModule } from './evaluation/evaluation.module';
 import { DisciplineModule } from './discipline/discipline.module';
 import { DisciplineService } from './discipline/discipline.service';
-import { ShiftsModule } from './shifts/shifts.module';
 
 @Module({
   imports: [
@@ -32,7 +31,6 @@ import { ShiftsModule } from './shifts/shifts.module';
     TherapyModule,
     EvaluationModule,
     DisciplineModule,
-    ShiftsModule,
   ],
   controllers: [],
   providers: [DisciplineService],
