@@ -85,12 +85,22 @@ export class AuthService {
     // });
     const userList = await this.userRepository
       .createQueryBuilder('user')
+      .select([
+        'user.id',
+        'user.firstName',
+        'user.lastName',
+        'user.email',
+        'user.isActive',
+        'user.role',
+        'user.created_at',
+        'user.updated_at'
+      ])
       .leftJoin('user.created_by', 'created')
       .addSelect(['created.firstName', 'created.lastName', 'created.role'])
       .orderBy('user.id', 'ASC')
       .getMany();
 
-      return userList;
+    return userList;
   }
 
   async getAllPhysicians() {
