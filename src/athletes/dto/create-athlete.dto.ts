@@ -93,6 +93,7 @@ export class CreateAthleteDto {
   @ApiProperty()
   disciplineId: number;
 
+  @IsNotEmpty()
   birthPlace: string;
 
   @IsOptional()

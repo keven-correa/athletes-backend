@@ -62,7 +62,7 @@ export class AthletesService {
       .leftJoin('athlete.discipline', 'discipline')
       .addSelect(['discipline.name'])
       .leftJoin('athlete.created_by', 'created')
-      .addSelect(['created_by.firstName', 'created_by.lastName', 'created_by.role'])
+      .addSelect(['created.firstName', 'created.lastName', 'created.role'])
       .orderBy('athlete.id', 'DESC')
       .cache(4500)
       .getMany();

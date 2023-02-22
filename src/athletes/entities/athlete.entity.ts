@@ -77,7 +77,7 @@ export class Athlete {
   gender: Gender;
 
   @Column('date', {nullable: true})
-  sportAge: Date
+  sportAge: Date;
 
   @Column('int', {nullable: true})
   practiceHours: number;

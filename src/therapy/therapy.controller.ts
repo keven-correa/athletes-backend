@@ -38,12 +38,14 @@ export class TherapyController {
   }
 
   @Get(':id')
+  // @Auth(Role.Admin, Role.Physiotherapist, Role.Secretary)
   @ApiOperation({summary: 'Get therapy by id'})
   findOne(@Param('id', ParseIntPipe) id: number) {
     return this.therapyService.findOne(id);
   }
 
   @Patch(':id')
+  // @Auth(Role.Admin, Role.Physiotherapist, Role.Secretary)
   @ApiOperation({summary: 'Modifies therapy information'})
   update(@Param('id', ParseIntPipe) id: number, @Body() updateTherapyDto: UpdateTherapyDto) {
     return this.therapyService.update(id, updateTherapyDto);
