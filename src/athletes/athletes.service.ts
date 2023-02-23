@@ -26,8 +26,34 @@ export class AthletesService {
     private readonly disciplineRepository: Repository<Discipline>,
   ) {}
 
-  async create(createAthleteDto: CreateAthleteDto, user: User) {
-    //disciplineParam: Discipline
+  // async create(createAthleteDto: CreateAthleteDto, user: User) {
+  //   const getDiscipline = await this.disciplineRepository.findOne({
+  //     where: { id: createAthleteDto.disciplineId },
+  //   });
+  //   if (!getDiscipline) {
+  //     throw new NotFoundException(
+  //       `The Discipline with id: ${createAthleteDto.disciplineId} not found or dosen't exist.`,
+  //     );
+  //   }
+  //   try {
+  //     const newAthlete = this.athleteRepository.create({
+  //       ...createAthleteDto,
+  //       discipline: getDiscipline,
+  //       created_by: user,
+  //     });
+  //     if (!newAthlete.discipline) {
+  //       throw new BadRequestException();
+  //     }
+  //     await this.athleteRepository.save(newAthlete);
+
+  //     return this.findOne(newAthlete.id)
+  //   } catch (error) {
+  //     this.handleDbException(error);
+  //   }
+  // }
+
+  //**************************** OJO -> TEMPORAL - PARA BORRAR Y SUSTITUIRLO POR EL DE ARRIBA HASTA RESOLVER EL PROBLEMA DE AUTENTICACION DESDE ANGULAR */
+  async create(createAthleteDto: CreateAthleteDto, user?: User) {
     const getDiscipline = await this.disciplineRepository.findOne({
       where: { id: createAthleteDto.disciplineId },
     });
@@ -40,25 +66,24 @@ export class AthletesService {
       const newAthlete = this.athleteRepository.create({
         ...createAthleteDto,
         discipline: getDiscipline,
-        created_by: user,
+        // created_by: user,
       });
       if (!newAthlete.discipline) {
         throw new BadRequestException();
       }
       await this.athleteRepository.save(newAthlete);
 
-      return this.athleteRepository.findOneBy({ id: newAthlete.id });
+      return this.findOne(newAthlete.id)
     } catch (error) {
       this.handleDbException(error);
     }
   }
-
   async findAll(paginationDto: PaginationDto) {
     const { limit = 10, offset = 0 } = paginationDto;
     const athletes = await this.athleteRepository
       .createQueryBuilder('athlete')
-      // .take(limit)
-      // .skip(offset)
+      .take(limit)
+      .skip(offset)
       .leftJoin('athlete.discipline', 'discipline')
       .addSelect(['discipline.name'])
       .leftJoin('athlete.created_by', 'created')
