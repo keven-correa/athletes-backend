@@ -32,23 +32,23 @@ export class AthleteController {
   constructor(private readonly athletesService: AthletesService) {}
 
   @Post()
-  // @Auth(Role.Secretary, Role.Admin)
+  @Auth(Role.Secretary, Role.Admin)
   @HttpCode(HttpStatus.CREATED)
   @ApiOperation({summary: 'Create a new Athlete'})
-  // async create(
-  //   @Body() createAthleteDto: CreateAthleteDto,
-  //   @GetUserDecorator() user: User,
-  // ) {
-  //   return await this.athletesService.create(createAthleteDto, user);
-  // }
-
-  //**************************** OJO -> TEMPORAL - PARA BORRAR Y SUSTITUIRLO POR EL DE ARRIBA HASTA RESOLVER EL PROBLEMA DE AUTENTICACION DESDE ANGULAR */
   async create(
     @Body() createAthleteDto: CreateAthleteDto,
-    // @GetUserDecorator() user: User,
+    @GetUserDecorator() user: User,
   ) {
-    return await this.athletesService.create(createAthleteDto);
+    return await this.athletesService.create(createAthleteDto, user);
   }
+
+  //**************************** OJO -> TEMPORAL - PARA BORRAR Y SUSTITUIRLO POR EL DE ARRIBA HASTA RESOLVER EL PROBLEMA DE AUTENTICACION DESDE ANGULAR */
+  // async create(
+  //   @Body() createAthleteDto: CreateAthleteDto,
+  //   // @GetUserDecorator() user: User,
+  // ) {
+  //   return await this.athletesService.create(createAthleteDto);
+  // }
 
   @Get()
   @Auth(Role.Secretary, Role.Admin)
