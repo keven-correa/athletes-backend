@@ -5,7 +5,6 @@ import {
   JoinColumn,
   ManyToOne,
   OneToMany,
-  OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import {
@@ -19,6 +18,7 @@ import { Therapy } from '../../therapy/entities/therapy.entity';
 import { Evaluation } from '../../evaluation/entities/evaluation.entity';
 import { Discipline } from '../../discipline/entities/discipline.entity';
 import { User } from '../../auth/entities/user.entity';
+import { Shift } from '../../shifts/entities/shift.entity';
 
 @Entity('Athletes')
 export class Athlete {
@@ -111,6 +111,9 @@ export class Athlete {
     (athleteAppointment) => athleteAppointment.athlete,
   )
   appointments?: Appointment[];
+
+  @OneToMany(() => Shift, (shiftAthlete) => shiftAthlete.athlete)
+  shifts?: Shift[];
 
   @OneToMany(() => Therapy, (athleteTherapy) => athleteTherapy.athlete)
   therapies?: Therapy[];

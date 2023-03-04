@@ -1,0 +1,19 @@
+Manejo de turnos por llegada (cola)
+
+1 - se buscaria por cedula
+2 - se asignara a un departamento (El tipo de especialista que lo va a atender)
+3 - estatus --- atentdido, no atentdido
+
+
+
+
+**************************************************************
+se busca por el dato que sea al atleta, abre un dropdown y
+selecciona que especialidad lo va a atender ya sea un 
+medico general o un terapeuta.
+
+Se manejarian 4 endpoints  
+ 1 -> sera crear la cola
+ 2 -> modicara SOLAMENTE LA ESPECIALIDAD A ANTENDER
+ 3 -> ELIMINAR
+ 4 -> Mostrar todos. filtros: Por fecha, por status, por departamento
