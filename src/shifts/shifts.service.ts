@@ -1,26 +1,56 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { AthletesService } from '../athletes/athletes.service';
+import { Repository } from 'typeorm';
 import { CreateShiftDto } from './dto/create-shift.dto';
 import { UpdateShiftDto } from './dto/update-shift.dto';
+import { Shift } from './entities/shift.entity';
 
 @Injectable()
 export class ShiftsService {
-  create(createShiftDto: CreateShiftDto) {
-    return 'This action adds a new shift';
+  constructor(
+    @InjectRepository(Shift)
+    private readonly shiftRepository: Repository<Shift>,
+    @Inject(AthletesService)
+    private readonly athleteService: AthletesService,
+  ) {}
+
+  async create(createShiftDto: CreateShiftDto) {
+    
+      const athlete = await this.athleteService.findOne(createShiftDto.athlete);
+      const saveShift = this.shiftRepository.create({
+        athlete: athlete,
+        ...CreateShiftDto,
+      });
+      await this.shiftRepository.save(saveShift);
+      return await this.findOne(saveShift.id)
+   
+    
   }
 
-  findAll() {
-    return `This action returns all shifts`;
+  async findAll() {
+    try {
+      return await this.shiftRepository.find();
+    } catch (error) {
+      console.log;
+    }
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} shift`;
+  async findOne(id: number) {
+    return await this.shiftRepository.findOneBy({id: id})
   }
 
-  update(id: number, updateShiftDto: UpdateShiftDto) {
-    return `This action updates a #${id} shift`;
+  async update(id: number, updateShiftDto: UpdateShiftDto) {
+      const updateShift = await this.shiftRepository.preload({
+        id: id,
+        ...updateShiftDto,
+      });
+      await this.shiftRepository.save(updateShift);
+      return updateShift;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} shift`;
+  async remove(id: number) {
+    const deleteShift = await this.shiftRepository.delete(id);
+    return deleteShift;
   }
 }

@@ -1,9 +1,9 @@
 export enum Status {
-  Atthended = 'Atendido',
-  Unattended = 'NoAtendido',
+  Atthended = 1,
+  Unattended = 2,
 }
 
 export enum Speciality {
-  GeneralPhysician = 'MedicoGeneral',
-  Physiotherapist = 'Terapeuta',
+  GeneralPhysician = 1,
+  Physiotherapist = 2,
 }

@@ -2,7 +2,9 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { ShiftsService } from './shifts.service';
 import { CreateShiftDto } from './dto/create-shift.dto';
 import { UpdateShiftDto } from './dto/update-shift.dto';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Shifts')
 @Controller('shifts')
 export class ShiftsController {
   constructor(private readonly shiftsService: ShiftsService) {}
@@ -23,12 +25,12 @@ export class ShiftsController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateShiftDto: UpdateShiftDto) {
+  update(@Param('id') id: number, @Body() updateShiftDto: UpdateShiftDto) {
     return this.shiftsService.update(+id, updateShiftDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.shiftsService.remove(+id);
+  remove(@Param('id') id: number) {
+    return this.shiftsService.remove(id);
   }
 }
