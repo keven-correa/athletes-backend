@@ -20,6 +20,7 @@ import { GetUserDecorator } from './decorators/get-user.decorator';
 import { CreateUserDto } from './dto/create-user.dto';
 import { InactivateUserDto } from './dto/inactivate-user.dto';
 import { LoginUserDto } from './dto/login-user.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
 import { Role } from './enums/user.roles';
 
@@ -47,6 +48,11 @@ export class AuthController {
   @ApiOperation({ summary: 'List of all registered users' })
   getAllUsers(@Query() paginationDto: PaginationDto) {
     return this.authService.getAllUsers(paginationDto);
+  }
+
+  @Get('get-user/:id')
+  getUserById(@Param('id', ParseIntPipe) id: number){
+    return this.authService.getUserById(id);
   }
 
   @Get('get-all-physicians')
@@ -80,4 +86,12 @@ export class AuthController {
   ) {
     return this.authService.inactivateUser(id, inactivateUserDto);
   }
+
+  @Patch('update-user/:id')
+  @HttpCode(HttpStatus.OK)
+  @Auth(Role.Admin)
+  updateUser(@Param('id', ParseIntPipe) id: number, @Body() updateUserDto: UpdateUserDto){
+    return this.authService.updateUser(id, updateUserDto);
+  }
+
 }

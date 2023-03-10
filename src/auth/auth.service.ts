@@ -15,6 +15,7 @@ import * as bcrypt from 'bcrypt';
 import { JwtPayload } from './interfaces/jwt-payload.interface';
 import { InactivateUserDto } from './dto/inactivate-user.dto';
 import { PaginationDto } from '../common/dtos/pagination.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
 
 @Injectable()
 export class AuthService {
@@ -70,19 +71,27 @@ export class AuthService {
       token: this.getJwtToken({ id: user.id }),
     };
   }
-
+  async getUserById(id: number) {
+    const find = await this.userRepository.findOneBy({ id: id });
+    if (!find) throw new NotFoundException(`User with id: ${id} not found!`);
+    const user = await this.userRepository
+      .createQueryBuilder('user')
+      .select([
+        'user.id',
+        'user.firstName',
+        'user.lastName',
+        'user.email',
+        'user.isActive',
+        'user.role',
+        'user.created_at',
+        'user.updated_at',
+      ])
+      .where('user.id = :id', { id })
+      .cache(2500)
+      .getOne();
+    return user;
+  }
   async getAllUsers(paginationDto: PaginationDto) {
-    // const { limit = 10, offset = 0 } = paginationDto;
-    // return await this.userRepository.find({
-    //   take: limit,
-    //   skip: offset,
-    //   relations: ['created_by'],
-    //   order: {
-    //     id: 'ASC',
-    //   },
-    //   cache: 4500,
-
-    // });
     const userList = await this.userRepository
       .createQueryBuilder('user')
       .select([
@@ -93,7 +102,7 @@ export class AuthService {
         'user.isActive',
         'user.role',
         'user.created_at',
-        'user.updated_at'
+        'user.updated_at',
       ])
       .leftJoin('user.created_by', 'created')
       .addSelect(['created.firstName', 'created.lastName', 'created.role'])
@@ -177,6 +186,17 @@ export class AuthService {
     const inactivate = await this.userRepository.preload({
       id: id,
       ...inactivateUserDto,
+    });
+    await this.userRepository.save(inactivate);
+    return inactivate;
+  }
+
+  async updateUser(id: number, updateUserDto: UpdateUserDto) {
+    const find = await this.userRepository.findOneBy({ id: id });
+    if (!find) throw new NotFoundException(`User with id: ${id} not found!`);
+    const inactivate = await this.userRepository.preload({
+      id: id,
+      ...updateUserDto,
     });
     await this.userRepository.save(inactivate);
     return inactivate;
