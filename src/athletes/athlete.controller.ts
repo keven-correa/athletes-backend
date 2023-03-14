@@ -42,16 +42,8 @@ export class AthleteController {
     return await this.athletesService.create(createAthleteDto, user);
   }
 
-  //**************************** OJO -> TEMPORAL - PARA BORRAR Y SUSTITUIRLO POR EL DE ARRIBA HASTA RESOLVER EL PROBLEMA DE AUTENTICACION DESDE ANGULAR */
-  // async create(
-  //   @Body() createAthleteDto: CreateAthleteDto,
-  //   // @GetUserDecorator() user: User,
-  // ) {
-  //   return await this.athletesService.create(createAthleteDto);
-  // }
-
   @Get()
-  @Auth(Role.Secretary, Role.Admin)
+  @Auth(Role.Secretary, Role.Admin, Role.GeneralystPhysiciann, Role.Physiotherapist)
   @HttpCode(HttpStatus.OK)
   @ApiOperation({summary: 'Retrieve a list of athletes'})
   findAll(@Query() paginationDto: PaginationDto) {
@@ -59,7 +51,7 @@ export class AthleteController {
   }
 
   @Get(':id')
-  @Auth(Role.Secretary, Role.Admin)
+  @Auth(Role.Secretary, Role.Admin, Role.GeneralystPhysiciann, Role.Physiotherapist)
   @HttpCode(HttpStatus.OK)
   @ApiOperation({summary: 'Get data of athlete by id'})
   findOne(@Param('id', ParseIntPipe) id: number) {
@@ -78,15 +70,4 @@ export class AthleteController {
     return this.athletesService.update(id, updateAthleteDto, user);
   }
 
-  // @Patch(':id')
-  // @HttpCode(HttpStatus.OK)
-  // @Auth(Role.Admin)
-  // inactivateUser(@Param('id', ParseIntPipe) id: number, @Body() inactivateAthleteDto: InactivaAthleteDto, @GetUserDecorator() user: User){
-  //   return this.athletesService.inactivate(id, inactivateAthleteDto, user)
-  // }
-  // @Delete(':id')
-  // @HttpCode(HttpStatus.NO_CONTENT)
-  // remove(@Param('id', ParseIntPipe) id: number) {
-  //   return this.athletesService.remove(id);
-  // }
 }
