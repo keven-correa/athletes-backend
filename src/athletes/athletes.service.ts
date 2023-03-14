@@ -82,15 +82,17 @@ export class AthletesService {
     const { limit = 10, offset = 0 } = paginationDto;
     const athletes = await this.athleteRepository
       .createQueryBuilder('athlete')
-      .take(limit)
-      .skip(offset)
+      // .take(limit)
+      // .skip(offset)
       .leftJoin('athlete.discipline', 'discipline')
       .addSelect(['discipline.name'])
       .leftJoin('athlete.created_by', 'created')
       .addSelect(['created.firstName', 'created.lastName', 'created.role'])
       .orderBy('athlete.id', 'DESC')
       .cache(4500)
+      // .getCount()
       .getMany();
+      
 
     return athletes;
   }
