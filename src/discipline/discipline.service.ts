@@ -52,6 +52,21 @@ export class DisciplineService {
     await this.disciplineRepository.save(discipline);
   }
 
+  //report
+  async getDisciplines(){
+    try {
+      const result = await this.disciplineRepository.createQueryBuilder("discipline")
+                          .loadRelationCountAndMap('discipline.athletes', 'discipline.athletes')
+                          .getMany()
+                          return result;
+    } catch (error) {
+      console.log(error)
+    }
+                    
+    console.log('result***********************')
+    
+  }
+
   remove(id: number) {
     return `This action removes a #${id} discipline`;
   }

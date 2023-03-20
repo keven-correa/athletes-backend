@@ -14,7 +14,7 @@ export class AppointmentController {
   constructor(private readonly appointmentService: AppointmentService) {}
 
   @Post()
-  @Auth(Role.Admin)
+  @Auth(Role.Admin, Role.Physiotherapist, Role.GeneralystPhysiciann)
   @ApiOperation({summary: 'Create a new appointment'})
   create(@Body() createAppointmentDto: CreateAppointmentDto, @GetUserDecorator() createdBy: User) {
     return this.appointmentService.create(createAppointmentDto, createdBy);
@@ -44,6 +44,7 @@ export class AppointmentController {
   }
 
   @Delete(':id')
+  @Auth(Role.Admin, Role.Physiotherapist, Role.GeneralystPhysiciann)
   @ApiOperation({summary: 'Delete an appointment'})
   remove(@Param('id') id: string) {
     return this.appointmentService.remove(+id);

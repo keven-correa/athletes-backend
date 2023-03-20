@@ -37,7 +37,7 @@ export class DisciplineController {
     return this.disciplineService.create(createDisciplineDto, user);
   }
 
-  @Get()
+  @Get('all')
   @Auth(Role.Admin, Role.GeneralystPhysiciann, Role.Physiotherapist, Role.Secretary)
   @ApiOperation({summary: 'Get all disciplines'})
   findAll(@Query() paginationDto: PaginationDto) {
@@ -49,6 +49,13 @@ export class DisciplineController {
   @ApiOperation({summary: 'Get one discipline by id '})
   findOne(@Param('id') id: string) {
     return this.disciplineService.findOne(+id);
+  }
+
+  //report
+  @Get()
+  @Auth(Role.Admin)
+  getCuantityOfAthletes(){
+    return this.disciplineService.getDisciplines();
   }
 
   @Patch(':id')
