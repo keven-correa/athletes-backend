@@ -64,8 +64,8 @@ export class User {
   @OneToMany(() => Appointment, (appointment) => appointment.created_by)
   appointments: Appointment[];
 
-  @OneToMany(() => Appointment, (assing) => assing.assigned_to)
-  assing_appointment: Appointment[];
+  // @OneToMany(() => Appointment, (assing) => assing.assigned_to)
+  // assing_appointment: Appointment[];
 
   @OneToMany(() => Discipline, (discipline) => discipline.created_by)
   discipline: Discipline

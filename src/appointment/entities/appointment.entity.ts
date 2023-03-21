@@ -23,14 +23,14 @@ export class Appointment {
   @ManyToOne(() => Athlete, (athlete) => athlete.appointments)
   athlete: Athlete;
 
-  @JoinColumn({name: 'assigned_to'})
-  @ManyToOne(() => User, (assigned) => assigned.assing_appointment)
-  assigned_to: User;
+  // @JoinColumn({name: 'assigned_to'})
+  // @ManyToOne(() => User, (assigned) => assigned.assing_appointment)
+  // assigned_to: User;
 
   @JoinColumn({ name: 'created_by' }) 
   @ManyToOne(() => User, (user) => user.appointments)
   created_by: User;
 
-  @CreateDateColumn()
+  @CreateDateColumn() 
   created_at: Date
 }

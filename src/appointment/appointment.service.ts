@@ -29,19 +29,20 @@ export class AppointmentService {
   ) {}
 
   async create(createAppointmentDto: CreateAppointmentDto, createdBy: User) {
-    const [doctor, athlete] = await Promise.all([
-      this.authService.getUserPhysicianById(createAppointmentDto.assigned_to),
-      this.athleteService.findOne(createAppointmentDto.athlete),
-    ]);
-    if (!doctor || !athlete) throw new NotFoundException();
+
+    const athlete = await this.athleteService.findOne(createAppointmentDto.athlete);
+
+    // const [doctor, athlete] = await Promise.all([
+    //   this.authService.getUserPhysicianById(createAppointmentDto.assigned_to),
+    // ]);
+    if (!athlete) throw new NotFoundException();
 
     const appointment = this.appointmentRepository.create({
-      ...createAppointmentDto,
-      athlete: athlete,
-      assigned_to: doctor,
-      created_by: createdBy,
+    ...createAppointmentDto,
+    created_by: createdBy,
+    athlete: athlete
     });
-    if (!appointment.assigned_to || !appointment.athlete)
+    if (!appointment.athlete)
       throw new BadRequestException();
 
     await this.appointmentRepository.save(appointment);
@@ -56,8 +57,8 @@ export class AppointmentService {
         .addSelect(['athlete.name', 'athlete.lastName'])
         .leftJoin('athlete.discipline', 'discipline')
         .addSelect(['discipline.name'])
-        .leftJoin('appointment.assigned_to', 'assigned')
-        .addSelect(['assigned.firstName', 'assigned.lastName', 'assigned.role'])
+        // .leftJoin('appointment.assigned_to', 'assigned')
+        // .addSelect(['assigned.firstName', 'assigned.lastName', 'assigned.role'])
         .leftJoin('appointment.created_by', 'created')
         .addSelect(['created.firstName', 'created.lastName', 'created.role'])
         .orderBy('appointment.id', 'ASC')
@@ -78,8 +79,8 @@ export class AppointmentService {
         .addSelect(['athlete.name', 'athlete.lastName'])
         .leftJoin('athlete.discipline', 'discipline')
         .addSelect(['discipline.name'])
-        .leftJoin('appointment.assigned_to', 'assigned')
-        .addSelect(['assigned.firstName', 'assigned.lastName', 'assigned.role'])
+        // .leftJoin('appointment.assigned_to', 'assigned')
+        // .addSelect(['assigned.firstName', 'assigned.lastName', 'assigned.role'])
         .leftJoin('appointment.created_by', 'created')
         .addSelect(['created.firstName', 'created.lastName', 'created.role'])
         .where('appointment.id =:id', { id: id })
@@ -92,15 +93,13 @@ export class AppointmentService {
     const validate = await this.validateIfAppointmetExists(id);
     if (!validate) throw new NotFoundException();
 
-    const [doctor, athlete] = await Promise.all([
-      this.authService.getUserPhysicianById(updateAppointmentDto.assigned_to),
-      this.athleteService.findOne(updateAppointmentDto.athlete),
-    ]);
+   const athlete = await this.athleteService.findOne(updateAppointmentDto.athlete)
+
     const appointment = await this.appointmentRepository.preload({
       id: id,
       ...updateAppointmentDto,
-      assigned_to: doctor,
-      athlete: athlete,
+      // assigned_to: doctor,
+      athlete: athlete
     });
     this.appointmentRepository.save(appointment);
     return appointment;
@@ -111,8 +110,8 @@ export class AppointmentService {
 
     const appointments = await this.appointmentRepository
       .createQueryBuilder('appointments')
-      .leftJoin('appointments.assigned_to', 'assigned')
-      .addSelect(['assigned.firstName', 'assigned.lastName', 'assigned.role'])
+      // .leftJoin('appointments.assigned_to', 'assigned')
+      // .addSelect(['assigned.firstName', 'assigned.lastName', 'assigned.role'])
       .leftJoin('appointments.created_by', 'created')
       .addSelect(['created.firstName', 'created.lastName', 'created.role'])
       .where('appointments.athleteId =:id', { id: validateAthlete.id })
