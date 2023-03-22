@@ -25,9 +25,6 @@ export class EvaluationService {
     private readonly athleteService: AthletesService,
   ) {}
   async create(createEvaluationDto: CreateEvaluationDto, user: User) {
-    // const assingADoctor = await this.authService.getUserPhysiotherapistById(
-    //   createEvaluationDto.assigned_to,
-    // );
     const athlete = await this.athleteService.findOne(
       createEvaluationDto.athlete,
     );
@@ -40,10 +37,8 @@ export class EvaluationService {
       ...createEvaluationDto,
       created_by: user,
       athlete: athlete,
-      // assigned_to: assingADoctor,
     });
     await this.evaluationRepository.save(createEvaluation);
-    // if (!createEvaluation.assigned_to) throw new BadRequestException();
     if (!createEvaluation.athlete) throw new BadRequestException();
     return await this.evaluationRepository.findOneBy({
       id: createEvaluation.id,
@@ -60,10 +55,19 @@ export class EvaluationService {
     return athlete;
   }
 
+  async getEvaluathionsByAthleteId(id: number) {
+    const validateAthlete = await this.athleteService.findOne(id);
+    const therapies = await this.evaluationRepository
+      .createQueryBuilder('evaluations')
+      .where('evaluations.athleteId =:id', { id: validateAthlete.id })
+      .getMany();
+    return therapies;
+  }
+
   async update(id: number, updateEvaluationDto: UpdateEvaluationDto) {
     const athlete = await this.athleteService.findOne(
       updateEvaluationDto.athlete,
-    )
+    );
     if (!athlete) {
       throw new NotFoundException(
         `Athlete with id: ${updateEvaluationDto.athlete} not found!`,
@@ -73,7 +77,7 @@ export class EvaluationService {
     const evaluation = await this.evaluationRepository.preload({
       id: id,
       ...updateEvaluationDto,
-      athlete: athlete
+      athlete: athlete,
     });
 
     return evaluation;

@@ -32,7 +32,7 @@ export class EvaluationController {
   }
 
   @Get()
-  @Auth(Role.Admin, Role.Physiotherapist)
+  @Auth(Role.Admin, Role.Physiotherapist, Role.GeneralystPhysiciann)
   @HttpCode(200)
   @ApiOperation({summary: 'Retrieve a list of all Evaluations'})
   findAll() {
@@ -40,10 +40,15 @@ export class EvaluationController {
   }
 
   @Get(':id')
-  @Auth(Role.Physiotherapist, Role.GeneralystPhysiciann)
+  @Auth(Role.Admin, Role.Physiotherapist, Role.GeneralystPhysiciann)
   @ApiOperation({summary: 'Get an evaluation by id'})
   findOne(@Param('id', ParseIntPipe) id: number, ) {
     return this.evaluationService.findOne(id);
+  }
+
+  @Get('evaluations-by-athlete/:id')
+  findAllByAthleteId(@Param('id', ParseIntPipe) id: number){
+    return this.evaluationService.getEvaluathionsByAthleteId(id);
   }
 
   @Patch(':id')

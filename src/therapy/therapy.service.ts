@@ -49,13 +49,15 @@ export class TherapyService {
       return findTherapy;
     }
   }
-  async getTherapiesByAthleteId(id: number){
+  async getTherapiesByAthleteId(id: number) {
     const validateAthlete = await this.athleteService.findOne(id);
-    const therapies = await this.therapyRepository.createQueryBuilder('therapies')
-                      .where('therapies.athleteId =:id', {id: validateAthlete.id})
-                      .getMany();
+    const therapies = await this.therapyRepository
+      .createQueryBuilder('therapies')
+      .where('therapies.athleteId =:id', { id: validateAthlete.id })
+      .getMany();
     return therapies;
   }
+  
   async update(id: number, updateTherapyDto: UpdateTherapyDto) {
     const therapy = await this.findOne(id);
     if (!therapy)

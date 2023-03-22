@@ -28,43 +28,45 @@ export class DisciplineService {
   }
 
   async findAll(paginationDto: PaginationDto) {
-    const {limit = 10, offset = 0} = paginationDto
+    const { limit = 10, offset = 0 } = paginationDto;
     return await this.disciplineRepository.find({
       take: limit,
       skip: offset,
-      cache: 3200
+      cache: 3200,
     });
   }
 
   async findOne(id: number) {
     const discipline = await this.disciplineRepository.findOneBy({ id: id });
-    if(!discipline) throw new NotFoundException();
+    if (!discipline) throw new NotFoundException();
     return discipline;
   }
 
-  async update(id: number, updateDisciplineDto: UpdateDisciplineDto, user: User) {
+  async update(
+    id: number,
+    updateDisciplineDto: UpdateDisciplineDto,
+    user: User,
+  ) {
     const discipline = await this.disciplineRepository.preload({
       id: id,
       ...updateDisciplineDto,
-      updated_by: user
+      updated_by: user,
     });
 
     await this.disciplineRepository.save(discipline);
   }
 
   //report
-  async getDisciplines(){
+  async getDisciplines() {
     try {
-      const result = await this.disciplineRepository.createQueryBuilder("discipline")
-                          .loadRelationCountAndMap('discipline.athletes', 'discipline.athletes')
-                          .getMany()
-                          return result;
+      const result = await this.disciplineRepository
+        .createQueryBuilder('discipline')
+        .loadRelationCountAndMap('discipline.athletes', 'discipline.athletes')
+        .getMany();
+      return result;
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
-                    
-    console.log('result***********************')
-    
   }
 
   remove(id: number) {
