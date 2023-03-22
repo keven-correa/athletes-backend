@@ -32,9 +32,6 @@ export class AppointmentService {
 
     const athlete = await this.athleteService.findOne(createAppointmentDto.athlete);
 
-    // const [doctor, athlete] = await Promise.all([
-    //   this.authService.getUserPhysicianById(createAppointmentDto.assigned_to),
-    // ]);
     if (!athlete) throw new NotFoundException();
 
     const appointment = this.appointmentRepository.create({

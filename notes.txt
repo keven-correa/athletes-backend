@@ -17,3 +17,6 @@ Se manejarian 4 endpoints
  2 -> modicara SOLAMENTE LA ESPECIALIDAD A ANTENDER
  3 -> ELIMINAR
  4 -> Mostrar todos. filtros: Por fecha, por status, por departamento
+
+
+ endpoint para traer todas las terapias por atleta

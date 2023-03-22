@@ -43,6 +43,11 @@ export class TherapyController {
   findOne(@Param('id', ParseIntPipe) id: number) {
     return this.therapyService.findOne(id);
   }
+  
+  @Get('get-therapies-by-athlete/:id')
+  findAllByAthlete(@Param('id', ParseIntPipe) id: number){
+    return this.therapyService.getTherapiesByAthleteId(id)
+  }
 
   @Patch(':id')
   // @Auth(Role.Admin, Role.Physiotherapist, Role.Secretary)
