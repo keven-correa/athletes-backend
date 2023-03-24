@@ -52,32 +52,6 @@ export class AthletesService {
     }
   }
 
-  //**************************** OJO -> TEMPORAL - PARA BORRAR Y SUSTITUIRLO POR EL DE ARRIBA HASTA RESOLVER EL PROBLEMA DE AUTENTICACION DESDE ANGULAR */
-  // async create(createAthleteDto: CreateAthleteDto, user?: User) {
-  //   const getDiscipline = await this.disciplineRepository.findOne({
-  //     where: { id: createAthleteDto.disciplineId },
-  //   });
-  //   if (!getDiscipline) {
-  //     throw new NotFoundException(
-  //       `The Discipline with id: ${createAthleteDto.disciplineId} not found or dosen't exist.`,
-  //     );
-  //   }
-  //   try {
-  //     const newAthlete = this.athleteRepository.create({
-  //       ...createAthleteDto,
-  //       discipline: getDiscipline,
-  //       // created_by: user,
-  //     });
-  //     if (!newAthlete.discipline) {
-  //       throw new BadRequestException();
-  //     }
-  //     await this.athleteRepository.save(newAthlete);
-
-  //     return this.findOne(newAthlete.id)
-  //   } catch (error) {
-  //     this.handleDbException(error);
-  //   }
-  // }
   async findAll(paginationDto: PaginationDto) {
     const { limit = 10, offset = 0 } = paginationDto;
     const athletes = await this.athleteRepository
@@ -100,7 +74,7 @@ export class AthletesService {
     const athlete = await this.athleteRepository
       .createQueryBuilder('athlete')
       .leftJoin('athlete.discipline', 'discipline')
-      .addSelect(['discipline.name'])
+      .addSelect(['discipline.id', 'discipline.name'])
       .leftJoin('athlete.created_by', 'createdBy')
       .addSelect([
         'createdBy.firstName',
