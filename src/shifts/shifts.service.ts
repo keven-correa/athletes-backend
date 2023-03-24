@@ -16,37 +16,46 @@ export class ShiftsService {
   ) {}
 
   async create(createShiftDto: CreateShiftDto) {
-    
-      const athlete = await this.athleteService.findOne(createShiftDto.athlete);
-      const saveShift = this.shiftRepository.create({
-        athlete: athlete,
-        ...CreateShiftDto,
-      });
-      await this.shiftRepository.save(saveShift);
-      return await this.findOne(saveShift.id)
-   
-    
+    const athlete = await this.athleteService.findOne(createShiftDto.athlete);
+    const saveShift = this.shiftRepository.create({
+      athlete: athlete,
+      ...CreateShiftDto,
+    });
+    await this.shiftRepository.save(saveShift);
+    return await this.findOne(saveShift.id);
   }
 
   async findAll() {
     try {
-      return await this.shiftRepository.find();
+      const shifts = await this.shiftRepository
+        .createQueryBuilder('shift')
+        .select(['shift.id AS id', 'shift.status AS status', 'shift.createdAt AS createdAt', 'shift.remarks AS remarks', 'shift.speciality AS speciality'])
+        .leftJoin('shift.athlete', 'athlete')
+        .addSelect(['athlete.name || \' \' || athlete.lastName AS athlete', ])
+        
+        // .addSelect([
+        //   'athlete.id',
+        //   "athlete.name",
+        //   "athlete.lastName"
+        // ])
+        .getRawMany();
+        return shifts;
     } catch (error) {
       console.log;
     }
   }
 
   async findOne(id: number) {
-    return await this.shiftRepository.findOneBy({id: id})
+    return await this.shiftRepository.findOneBy({ id: id });
   }
 
   async update(id: number, updateShiftDto: UpdateShiftDto) {
-      const updateShift = await this.shiftRepository.preload({
-        id: id,
-        ...updateShiftDto,
-      });
-      await this.shiftRepository.save(updateShift);
-      return updateShift;
+    const updateShift = await this.shiftRepository.preload({
+      id: id,
+      ...updateShiftDto,
+    });
+    await this.shiftRepository.save(updateShift);
+    return updateShift;
   }
 
   async remove(id: number) {
