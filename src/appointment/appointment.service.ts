@@ -14,7 +14,6 @@ import { UpdateAppointmentDto } from './dto/update-appointment.dto';
 import { Appointment } from './entities/appointment.entity';
 import { AthletesService } from '../athletes/athletes.service';
 import { User } from '../auth/entities/user.entity';
-import { Athlete } from '../athletes/entities/athlete.entity';
 
 @Injectable()
 export class AppointmentService {
@@ -51,13 +50,11 @@ export class AppointmentService {
       return await this.appointmentRepository
         .createQueryBuilder('appointment')
         .leftJoin('appointment.athlete', 'athlete')
-        .addSelect(['athlete.name', 'athlete.lastName'])
+        .addSelect(['athlete.id','athlete.name', 'athlete.lastName'])
         .leftJoin('athlete.discipline', 'discipline')
-        .addSelect(['discipline.name'])
-        // .leftJoin('appointment.assigned_to', 'assigned')
-        // .addSelect(['assigned.firstName', 'assigned.lastName', 'assigned.role'])
+        .addSelect(['discipline.id' ,'discipline.name'])
         .leftJoin('appointment.created_by', 'created')
-        .addSelect(['created.firstName', 'created.lastName', 'created.role'])
+        .addSelect(['created.id','created.firstName', 'created.lastName', 'created.role'])
         .orderBy('appointment.id', 'ASC')
         .cache(4500)
         .getMany();
@@ -73,13 +70,11 @@ export class AppointmentService {
       const appointment = await this.appointmentRepository
         .createQueryBuilder('appointment')
         .leftJoin('appointment.athlete', 'athlete')
-        .addSelect(['athlete.name', 'athlete.lastName'])
+        .addSelect(['athlete.id', 'athlete.name', 'athlete.lastName'])
         .leftJoin('athlete.discipline', 'discipline')
-        .addSelect(['discipline.name'])
-        // .leftJoin('appointment.assigned_to', 'assigned')
-        // .addSelect(['assigned.firstName', 'assigned.lastName', 'assigned.role'])
+        .addSelect(['discipline.id' ,'discipline.name'])
         .leftJoin('appointment.created_by', 'created')
-        .addSelect(['created.firstName', 'created.lastName', 'created.role'])
+        .addSelect(['created.id','created.firstName', 'created.lastName', 'created.role'])
         .where('appointment.id =:id', { id: id })
         .getOne();
       return appointment;
