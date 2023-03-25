@@ -175,9 +175,42 @@ export class AuthService {
       ])
       .leftJoin('appointments.athlete', 'athlete')
       .addSelect(['athlete.id', 'athlete.name', 'athlete.lastName'])
+      .leftJoin('athlete.discipline', 'discipline')
+      .addSelect('discipline.name')
       .getMany();
     return physician;
   }
+
+  async getAthletesWithDisciplineCount(id: number){
+    const physicians = await this.userRepository
+    .createQueryBuilder('user')
+    .select([
+      'user.id',
+      'user.firstName',
+      'user.lastName',
+      'user.email',
+      'user.isActive',
+      'user.role',
+      'COUNT(athlete.id) AS athleteCount',
+      'discipline.name AS disciplineName'
+    ])
+    .where('user.id =:id', {
+          id: id,
+        })
+    .andWhere('user.role = :role', {
+      role: 'MedicoGeneral',
+    })
+    .andWhere('user.isActive = :isActive', {
+      isActive: true,
+    })
+    .leftJoin('user.appointments', 'appointments')
+    .leftJoin('appointments.athlete', 'athlete')
+    .leftJoin('athlete.discipline', 'discipline')
+    .groupBy('user.id, discipline.id')
+    .getRawMany();
+  return physicians;
+  }
+
   async getUserPhysiotherapistById(id: number) {
     const find = await this.userRepository.findOneBy({ id: id });
     if (!find)

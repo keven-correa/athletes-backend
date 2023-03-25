@@ -70,9 +70,16 @@ export class AuthController {
     return this.authService.getAllSecretaries();
   }
 
+  //Report
   @Get('get-physician/:id')
   getUserPhysicianById(@Param('id', ParseIntPipe) id: number) {
     return this.authService.getUserPhysicianById(id);
+  }
+
+  //Report
+  @Get('get-athletes-count-discipline/:id')
+  getAthletesCountDiscipline(@Param('id', ParseIntPipe) id: number){
+    return this.authService.getAthletesWithDisciplineCount(id)
   }
 
   @Patch(':id')

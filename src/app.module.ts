@@ -23,7 +23,7 @@ import { ShiftsModule } from './shifts/shifts.module';
       password: process.env.DB_PASSWORD,
       autoLoadEntities: true,
       synchronize: true,
-      // logging: true
+      logging: true
     }),
     AthleteModule,
     CommonModule,
