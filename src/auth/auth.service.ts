@@ -142,12 +142,21 @@ export class AuthService {
     return secretaries;
   }
 
+  //Report
   async getUserPhysicianById(id: number) {
     const find = await this.userRepository.findOneBy({ id: id });
     if (!find)
       throw new NotFoundException(`Physician with id: ${id} not found!`);
     const physician = await this.userRepository
-      .createQueryBuilder('user')
+    .createQueryBuilder('user')
+    .select([
+      'user.id',
+      'user.firstName',
+      'user.lastName',
+      'user.email',
+      'user.isActive',
+      'user.role',
+    ])
       .where('user.id =:id', {
         id: id,
       })
@@ -157,10 +166,18 @@ export class AuthService {
       .andWhere('user.isActive = :isActive', {
         isActive: true,
       })
-      .getOne();
+      .leftJoin('user.appointments', 'appointments')
+      .addSelect([
+        'appointments.id',
+        'appointments.reason',
+        'appointments.diagnostic',
+        'appointments.notes',
+      ])
+      .leftJoin('appointments.athlete', 'athlete')
+      .addSelect(['athlete.id', 'athlete.name', 'athlete.lastName'])
+      .getMany();
     return physician;
   }
-
   async getUserPhysiotherapistById(id: number) {
     const find = await this.userRepository.findOneBy({ id: id });
     if (!find)
