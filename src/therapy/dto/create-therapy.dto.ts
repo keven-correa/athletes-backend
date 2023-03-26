@@ -20,4 +20,9 @@ export class CreateTherapyDto {
   @IsNotEmpty()
   @IsInt()
   athlete: number;
+
+  @ApiProperty()
+  @IsNotEmpty()
+  @IsInt()
+  evaluation: number;
 }

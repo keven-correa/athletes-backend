@@ -20,3 +20,5 @@ Se manejarian 4 endpoints
 
 
  endpoint para traer todas las terapias por atleta
+
+ crear una relacion de uno a muchos entre una evaluacion a muchas terapias

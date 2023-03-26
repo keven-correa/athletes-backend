@@ -9,6 +9,7 @@ import {
 } from 'typeorm';
 import { User } from '../../auth/entities/user.entity';
 import { Status } from '../enums/enum.therapy';
+import { Evaluation } from '../../evaluation/entities/evaluation.entity';
 // import { Doctor } from '../../doctor/entities/doctor.entity';
 
 @Entity('Therapies')
@@ -42,6 +43,9 @@ export class Therapy {
 
   @ManyToOne(() => Athlete, (athlete) => athlete.therapies)
   athlete: Athlete;
+
+  @ManyToOne(() => Evaluation, (evaluation) => evaluation.therapies)
+  evaliation: Evaluation
 
   @JoinColumn({ name: 'created_by' })
   @ManyToOne(() => User, (user) => user.therapies)

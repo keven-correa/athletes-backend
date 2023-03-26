@@ -6,10 +6,12 @@ import {
   Entity,
   JoinColumn,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import { Athlete } from '../../athletes/entities/athlete.entity';
+import { Therapy } from '../../therapy/entities/therapy.entity';
 
 @Entity('Evaluations')
 export class Evaluation {
@@ -49,6 +51,9 @@ export class Evaluation {
   @JoinColumn({ name: 'created_by' })
   @ManyToOne(() => User, (user) => user.evaluations)
   created_by: User;
+  
+  @OneToMany(() => Therapy, (evaluathionTherapy) => evaluathionTherapy.evaliation)
+  therapies: Therapy[]
 
   // @JoinColumn({ name: 'assigned_to' })
   // @ManyToOne(() => User, (assingned) => assingned.assing_evaluation)
