@@ -43,7 +43,12 @@ export class TherapyService {
   }
 
   async findAll() {
-    return await this.therapyRepository.find({ cache: 4000 });
+    const therapies = await this.therapyRepository
+      .createQueryBuilder('therapy')
+      .leftJoin('therapy.evaluation', 'evaluation')
+      .addSelect('evaluation.id')
+      .getMany();
+    return therapies;
   }
 
   async findOne(id: number) {
