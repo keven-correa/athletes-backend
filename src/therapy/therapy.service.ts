@@ -24,13 +24,12 @@ export class TherapyService {
   ) {}
 
   async create(createTherapyDto: CreateTherapyDto, createdBy: User) {
- 
-    const therapist = await this.authService.getUserById(createTherapyDto.therapist)
-    const athlete = await this.athleteService.findOne(createTherapyDto.athlete)
-    const evaluation = await this.evaluathionService.findOne(createTherapyDto.evaluation);
-    console.log(createTherapyDto.therapist)
-    console.log(therapist)
-  
+    const [therapist, athlete, evaluation] = await Promise.all([
+      this.authService.getUserById(createTherapyDto.therapist),
+      this.athleteService.findOne(createTherapyDto.athlete),
+      this.evaluathionService.findOne(createTherapyDto.evaluation),
+    ]);
+
     const therapy = this.therapyRepository.create({
       ...createTherapyDto,
       therapist: therapist,
@@ -38,7 +37,7 @@ export class TherapyService {
       evaluation: evaluation,
       created_by: createdBy,
     });
-    console.log(therapy)
+
     await this.therapyRepository.save(therapy);
     return therapy;
   }
@@ -48,12 +47,13 @@ export class TherapyService {
   }
 
   async findOne(id: number) {
-    const findTherapy = await this.therapyRepository.findOneBy({ id: id });
-    if (!findTherapy) {
-      throw new NotFoundException();
-    } else {
-      return findTherapy;
-    }
+    const therapy = await this.therapyRepository
+      .createQueryBuilder('therapy')
+      .where('therapy.id =:id', { id: id })
+      .leftJoin('therapy.evaluation', 'evaluation')
+      .addSelect('evaluation.id')
+      .getOne();
+    return therapy;
   }
   async getTherapiesByAthleteId(id: number) {
     const validateAthlete = await this.athleteService.findOne(id);
@@ -63,23 +63,23 @@ export class TherapyService {
       .getMany();
     return therapies;
   }
-  
+
   async update(id: number, updateTherapyDto: UpdateTherapyDto) {
     const therapy = await this.findOne(id);
     if (!therapy)
       throw new NotFoundException(`there is no therapy with the id: ${id}`);
 
     const [therapist, athlete, evaluation] = await Promise.all([
-      this.authService.getUserPhysiotherapistById(updateTherapyDto.therapist),
+      this.authService.getUserById(updateTherapyDto.therapist),
       this.athleteService.findOne(updateTherapyDto.athlete),
-      this.evaluathionService.findOne(updateTherapyDto.evaluation)
+      this.evaluathionService.findOne(updateTherapyDto.evaluation),
     ]);
     const updateTherapy = await this.therapyRepository.preload({
       id: id,
       ...updateTherapyDto,
       athlete: athlete,
       therapist: therapist,
-      evaluation: evaluation
+      evaluation: evaluation,
     });
     await this.therapyRepository.save(updateTherapy);
     return updateTherapy;
