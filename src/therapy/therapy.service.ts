@@ -63,8 +63,10 @@ export class TherapyService {
   async getTherapiesByAthleteId(id: number) {
     const validateAthlete = await this.athleteService.findOne(id);
     const therapies = await this.therapyRepository
-      .createQueryBuilder('therapies')
-      .where('therapies.athleteId =:id', { id: validateAthlete.id })
+      .createQueryBuilder('therapy')
+      .where('therapy.athleteId =:id', { id: validateAthlete.id })
+      .leftJoin('therapy.evaluation', 'evaluation')
+      .addSelect('evaluation.id')
       .getMany();
     return therapies;
   }
