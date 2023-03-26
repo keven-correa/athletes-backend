@@ -213,8 +213,8 @@ export class AuthService {
 
   async getUserPhysiotherapistById(id: number) {
     const find = await this.userRepository.findOneBy({ id: id });
-    if (!find)
-      throw new NotFoundException(`Therapist with id: ${id} not found!`);
+    // if (!find)
+    //   throw new NotFoundException(`Therapist with id: ${id} not found!`);
     const physiotherapist = await this.userRepository
       .createQueryBuilder('user')
       .where('user.id =:id', {
@@ -222,9 +222,6 @@ export class AuthService {
       })
       .andWhere('user.role = :role', {
         role: 'Fisioterapeuta',
-      })
-      .andWhere('user.isActive = :isActive', {
-        isActive: true,
       })
       .getOne();
     return physiotherapist;

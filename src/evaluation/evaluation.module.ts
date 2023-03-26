@@ -15,6 +15,6 @@ import { AthleteModule } from '../athletes/athletes.module';
     AuthModule,
     AthleteModule,
   ],
-  exports: [TypeOrmModule],
+  exports: [TypeOrmModule, EvaluationService],
 })
 export class EvaluationModule {}

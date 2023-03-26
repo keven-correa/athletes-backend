@@ -65,6 +65,10 @@ export class AuthController {
     return this.authService.getAllPhysioTherapist();
   }
 
+  @Get('get-physiotherapist/:id')
+  getAllPhysiotherapistById(@Param('id')id: number){
+    return this.authService.getUserPhysiotherapistById(id);
+  }
   @Get('get-all-secretaries')
   getAllSecretaries(){
     return this.authService.getAllSecretaries();

@@ -52,7 +52,7 @@ export class Evaluation {
   @ManyToOne(() => User, (user) => user.evaluations)
   created_by: User;
   
-  @OneToMany(() => Therapy, (evaluathionTherapy) => evaluathionTherapy.evaliation)
+  @OneToMany(() => Therapy, (evaluathionTherapy) => evaluathionTherapy.evaluation)
   therapies: Therapy[]
 
   // @JoinColumn({ name: 'assigned_to' })

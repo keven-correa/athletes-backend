@@ -45,7 +45,7 @@ export class Therapy {
   athlete: Athlete;
 
   @ManyToOne(() => Evaluation, (evaluation) => evaluation.therapies)
-  evaliation: Evaluation
+  evaluation: Evaluation
 
   @JoinColumn({ name: 'created_by' })
   @ManyToOne(() => User, (user) => user.therapies)
