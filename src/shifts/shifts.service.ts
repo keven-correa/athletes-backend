@@ -17,9 +17,10 @@ export class ShiftsService {
 
   async create(createShiftDto: CreateShiftDto) {
     const athlete = await this.athleteService.findOne(createShiftDto.athlete);
+     
     const saveShift = this.shiftRepository.create({
-      athlete: athlete,
-      ...CreateShiftDto,
+      ...createShiftDto,
+      athlete: athlete
     });
     await this.shiftRepository.save(saveShift);
     return await this.findOne(saveShift.id);

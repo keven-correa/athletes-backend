@@ -4,6 +4,6 @@ export enum Status {
 }
 
 export enum Speciality {
-  GeneralPhysician = 1,
-  Physiotherapist = 2,
+  GeneralPhysician = 'MedicoGeneral',
+  Physiotherapist = 'Fisioterapeuta',
 }
