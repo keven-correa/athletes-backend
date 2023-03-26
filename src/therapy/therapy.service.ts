@@ -41,7 +41,7 @@ export class TherapyService {
     await this.therapyRepository.save(therapy);
     return therapy;
   }
-
+  //get all
   async findAll() {
     const therapies = await this.therapyRepository
       .createQueryBuilder('therapy')
