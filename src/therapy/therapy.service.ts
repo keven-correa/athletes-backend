@@ -71,6 +71,17 @@ export class TherapyService {
     return therapies;
   }
 
+  async getTherapiesByUserId(id: number) {
+    const validateAthlete = await this.athleteService.findOne(id);
+    const therapies = await this.therapyRepository
+      .createQueryBuilder('therapy')
+      .where('therapy.user =:id', { id: validateAthlete.id })
+      .leftJoin('therapy.evaluation', 'evaluation')
+      .addSelect('evaluation.id')
+      .getMany();
+    return therapies;
+  }
+
   async update(id: number, updateTherapyDto: UpdateTherapyDto) {
     const therapy = await this.findOne(id);
     if (!therapy)

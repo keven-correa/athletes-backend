@@ -181,6 +181,7 @@ export class AuthService {
     return physician;
   }
 
+  //Report
   async getAthletesWithDisciplineCount(id: number){
     const physicians = await this.userRepository
     .createQueryBuilder('user')
@@ -211,6 +212,45 @@ export class AuthService {
   return physicians;
   }
 
+  //Report
+  async getUserPhysioterapistByIdReport(id: number) {
+    const find = await this.userRepository.findOneBy({ id: id });
+    if (!find)
+      throw new NotFoundException(`Physician with id: ${id} not found!`);
+    const physician = await this.userRepository
+    .createQueryBuilder('user')
+    .select([
+      'user.id',
+      'user.firstName',
+      'user.lastName',
+      'user.email',
+      'user.isActive',
+      'user.role',
+    ])
+      .where('user.id =:id', {
+        id: id,
+      })
+      // .andWhere('user.role = :role', {
+      //   role: 'Fisioterapeuta',
+      // })
+      // .andWhere('user.isActive = :isActive', {
+      //   isActive: true,
+      // })
+      .leftJoin('user.therapies', 'therapies')
+      .addSelect([
+        'therapies.id',
+        'therapies.remarks',
+        'therapies.status',
+        // 'appointments.notes',
+      ])
+      .leftJoin('therapies.athlete', 'athlete')
+      .addSelect(['athlete.id', 'athlete.name', 'athlete.lastName'])
+      // .leftJoin('athlete.discipline', 'discipline')
+      // .addSelect('discipline.name')
+      .getMany();
+    return physician;
+  }
+
   async getUserPhysiotherapistById(id: number) {
     const find = await this.userRepository.findOneBy({ id: id });
     // if (!find)
@@ -223,6 +263,13 @@ export class AuthService {
       .andWhere('user.role = :role', {
         role: 'Fisioterapeuta',
       })
+      .leftJoin('user.therapies', 'therapies')
+      .addSelect([
+        'therapies.id',
+        'therapies.remarks',
+        'therapies.status',
+        // 'appointments.notes',
+      ])
       .getOne();
     return physiotherapist;
   }

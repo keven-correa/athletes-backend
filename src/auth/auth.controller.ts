@@ -66,8 +66,13 @@ export class AuthController {
   }
 
   @Get('get-physiotherapist/:id')
-  getAllPhysiotherapistById(@Param('id')id: number){
+  getAllPhysiotherapistById(@Param('id', ParseIntPipe)id: number){
     return this.authService.getUserPhysiotherapistById(id);
+  }
+
+  @Get('get-physiotherapist-therapies-report/:id')
+  getAllPhysiotherapistByIdRep(@Param('id')id: number){
+    return this.authService.getUserPhysioterapistByIdReport(id);
   }
   @Get('get-all-secretaries')
   getAllSecretaries(){
