@@ -70,6 +70,8 @@ export class AuthController {
     return this.authService.getUserPhysiotherapistById(id);
   }
 
+  //Report
+  @ApiOperation({ summary: 'REPORTE -> Todas las consultas pertenecientes un Fisioterapeuta' })
   @Get('get-physiotherapist-therapies-report/:id')
   getAllPhysiotherapistByIdRep(@Param('id')id: number){
     return this.authService.getUserPhysioterapistByIdReport(id);
@@ -79,16 +81,28 @@ export class AuthController {
     return this.authService.getAllSecretaries();
   }
 
+  @Get('get-physicianById/:id')
+  getPhysicianById(@Param('id', ParseIntPipe) id: number) {
+    return this.authService.getPhysicianById(id);
+  }
   //Report
   @Get('get-physician/:id')
+  @ApiOperation({ summary: 'REPORTE -> Todas las consultas pertenecientes un medico general' })
   getUserPhysicianById(@Param('id', ParseIntPipe) id: number) {
     return this.authService.getUserPhysicianById(id);
   }
 
   //Report
   @Get('get-athletes-count-discipline/:id')
+  @ApiOperation({ summary: 'REPORTE -> Trae un conteo de todas las consultas pertenecientes a cada disciplina' })
   getAthletesCountDiscipline(@Param('id', ParseIntPipe) id: number){
     return this.authService.getAthletesWithDisciplineCount(id)
+  }
+
+  @Get('get-athletes-count-discipline-therapies/:id')
+  @ApiOperation({ summary: 'REPORTE -> Trae un conteo de todas las terapias pertenecientes a cada disciplina' })
+  getAthletesCountDisciplineTherapies(@Param('id', ParseIntPipe) id: number){
+    return this.authService.getTherapiesOfAthletesWithDisciplineCount(id)
   }
 
   @Patch(':id')

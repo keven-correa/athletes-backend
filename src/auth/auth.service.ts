@@ -142,6 +142,43 @@ export class AuthService {
     return secretaries;
   }
 
+  async getPhysicianById(id: number) {
+    const find = await this.userRepository.findOneBy({ id: id });
+    if (!find)
+      throw new NotFoundException(`Physician with id: ${id} not found!`);
+    const physician = await this.userRepository
+    .createQueryBuilder('user')
+    .select([
+      'user.id',
+      'user.firstName',
+      'user.lastName',
+      'user.email',
+      'user.isActive',
+      'user.role',
+    ])
+      .where('user.id =:id', {
+        id: id,
+      })
+      .andWhere('user.role = :role', {
+        role: 'MedicoGeneral',
+      })
+      .andWhere('user.isActive = :isActive', {
+        isActive: true,
+      })
+      // .leftJoin('user.appointments', 'appointments')
+      // .addSelect([
+      //   'appointments.id',
+      //   'appointments.reason',
+      //   'appointments.diagnostic',
+      //   'appointments.notes',
+      // ])
+      // .leftJoin('appointments.athlete', 'athlete')
+      // .addSelect(['athlete.id', 'athlete.name', 'athlete.lastName'])
+      // .leftJoin('athlete.discipline', 'discipline')
+      // .addSelect('discipline.name')
+      .getMany();
+    return physician;
+  }
   //Report
   async getUserPhysicianById(id: number) {
     const find = await this.userRepository.findOneBy({ id: id });
@@ -212,6 +249,36 @@ export class AuthService {
   return physicians;
   }
 
+   //Report
+   async getTherapiesOfAthletesWithDisciplineCount(id: number){
+    const physiotherapist = await this.userRepository
+    .createQueryBuilder('user')
+    .select([
+      'user.id',
+      'user.firstName',
+      'user.lastName',
+      'user.email',
+      'user.isActive',
+      'user.role',
+      'COUNT(athlete.id) AS athleteCount',
+      'discipline.name AS disciplineName'
+    ])
+    .where('user.id =:id', {
+          id: id,
+        })
+    .andWhere('user.role = :role', {
+      role: 'Fisioterapeuta',
+    })
+    .andWhere('user.isActive = :isActive', {
+      isActive: true,
+    })
+    .leftJoin('user.therapies', 'therapies')
+    .leftJoin('therapies.athlete', 'athlete')
+    .leftJoin('athlete.discipline', 'discipline')
+    .groupBy('user.id, discipline.id')
+    .getRawMany();
+  return physiotherapist;
+  }
   //Report
   async getUserPhysioterapistByIdReport(id: number) {
     const find = await this.userRepository.findOneBy({ id: id });
@@ -241,12 +308,12 @@ export class AuthService {
         'therapies.id',
         'therapies.remarks',
         'therapies.status',
-        // 'appointments.notes',
+        
       ])
       .leftJoin('therapies.athlete', 'athlete')
       .addSelect(['athlete.id', 'athlete.name', 'athlete.lastName'])
-      // .leftJoin('athlete.discipline', 'discipline')
-      // .addSelect('discipline.name')
+      .leftJoin('athlete.discipline', 'discipline')
+      .addSelect('discipline.name')
       .getMany();
     return physician;
   }
