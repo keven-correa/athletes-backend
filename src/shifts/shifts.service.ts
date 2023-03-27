@@ -39,12 +39,7 @@ export class ShiftsService {
         ])
         .leftJoin('shift.athlete', 'athlete')
         .addSelect(["athlete.name || ' ' || athlete.lastName AS athlete"])
-
-        // .addSelect([
-        //   'athlete.id',
-        //   "athlete.name",
-        //   "athlete.lastName"
-        // ])
+        .addSelect('athlete.id AS athleteId')
         .getRawMany();
       return shifts;
     } catch (error) {
@@ -53,7 +48,21 @@ export class ShiftsService {
   }
 
   async findOne(id: number) {
-    return await this.shiftRepository.findOneBy({ id: id });
+    // return await this.shiftRepository.findOneBy({ id: id });
+    return  await this.shiftRepository
+    .createQueryBuilder('shift')
+    .select([
+      'shift.id AS id',
+      'shift.status AS status',
+      'shift.createdAt AS createdAt',
+      'shift.remarks AS remarks',
+      'shift.speciality AS speciality',
+    ])
+    .where('shift.id =:id', {id: id})
+    .leftJoin('shift.athlete', 'athlete')
+    .addSelect(["athlete.name || ' ' || athlete.lastName AS athlete"])
+    .addSelect('athlete.id AS athleteId')
+    .getRawOne();
   }
 
   async update(id: number, updateShiftDto: UpdateShiftDto) {
