@@ -165,17 +165,6 @@ export class AuthService {
       .andWhere('user.isActive = :isActive', {
         isActive: true,
       })
-      // .leftJoin('user.appointments', 'appointments')
-      // .addSelect([
-      //   'appointments.id',
-      //   'appointments.reason',
-      //   'appointments.diagnostic',
-      //   'appointments.notes',
-      // ])
-      // .leftJoin('appointments.athlete', 'athlete')
-      // .addSelect(['athlete.id', 'athlete.name', 'athlete.lastName'])
-      // .leftJoin('athlete.discipline', 'discipline')
-      // .addSelect('discipline.name')
       .getMany();
     return physician;
   }
@@ -335,7 +324,6 @@ export class AuthService {
         'therapies.id',
         'therapies.remarks',
         'therapies.status',
-        // 'appointments.notes',
       ])
       .getOne();
     return physiotherapist;
