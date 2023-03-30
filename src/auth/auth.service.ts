@@ -358,6 +358,7 @@ export class AuthService {
     const inactivate = await this.userRepository.preload({
       id: id,
       ...updateUserDto,
+      password: bcrypt.hashSync(updateUserDto.password, 10)
     });
     await this.userRepository.save(inactivate);
     return inactivate;

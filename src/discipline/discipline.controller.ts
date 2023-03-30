@@ -53,7 +53,7 @@ export class DisciplineController {
 
   //report
   @Get()
-  @Auth(Role.Admin)
+  // @Auth(Role.Admin)
   @ApiOperation({ summary: 'REPORTE -> Trae un conteo de los atletas pertenecientes a cada disciplina' })
   getCuantityOfAthletes(){
     return this.disciplineService.getDisciplines();
