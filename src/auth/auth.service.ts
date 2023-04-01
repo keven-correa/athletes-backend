@@ -298,7 +298,7 @@ export class AuthService {
         'therapies.id',
         'therapies.remarks',
         'therapies.status',
-        
+        'therapies.created_at'
       ])
       .leftJoin('therapies.athlete', 'athlete')
       .addSelect(['athlete.id', 'athlete.name', 'athlete.lastName'])
