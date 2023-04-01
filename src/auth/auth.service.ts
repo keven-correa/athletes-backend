@@ -198,6 +198,7 @@ export class AuthService {
         'appointments.reason',
         'appointments.diagnostic',
         'appointments.notes',
+        'appointments.created_at'
       ])
       .leftJoin('appointments.athlete', 'athlete')
       .addSelect(['athlete.id', 'athlete.name', 'athlete.lastName'])

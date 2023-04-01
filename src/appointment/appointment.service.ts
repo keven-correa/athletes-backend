@@ -49,7 +49,8 @@ export class AppointmentService {
     try {
       return await this.appointmentRepository
         .createQueryBuilder('appointment')
-        .leftJoin('appointment.athlete', 'athlete')
+        // .addSelect(['appointment.id', 'appointment.reason', 'appointment.dignostic', 'appointment.notes', 'appointment.priority'])
+        .leftJoin('appointment.athlete', 'athlete',)
         .addSelect(['athlete.id', 'athlete.name', 'athlete.lastName'])
         .leftJoin('athlete.discipline', 'discipline')
         .addSelect(['discipline.id', 'discipline.name'])
