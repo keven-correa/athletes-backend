@@ -40,6 +40,7 @@ export class ShiftsService {
         .leftJoin('shift.athlete', 'athlete')
         .addSelect(["athlete.name || ' ' || athlete.lastName AS athlete"])
         .addSelect('athlete.id AS athleteId')
+        .orderBy('shift.id', 'DESC')
         .getRawMany();
       return shifts;
     } catch (error) {

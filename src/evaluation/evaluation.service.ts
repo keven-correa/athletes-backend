@@ -46,7 +46,7 @@ export class EvaluationService {
   }
 
   async findAll() {
-    return await this.evaluationRepository.find();
+    return await this.evaluationRepository.find({order: {id: 'ASC'}});
   }
 
   async findOne(id: number) {

@@ -106,7 +106,7 @@ export class AuthService {
       ])
       .leftJoin('user.created_by', 'created')
       .addSelect(['created.firstName', 'created.lastName', 'created.role'])
-      .orderBy('user.id', 'ASC')
+      .orderBy('user.id', 'DESC')
       .getMany();
 
     return userList;

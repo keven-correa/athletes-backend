@@ -61,7 +61,7 @@ export class AppointmentService {
           'created.lastName',
           'created.role',
         ])
-        .orderBy('appointment.id', 'ASC')
+        .orderBy('appointment.id', 'DESC')
         .cache(4500)
         .getMany();
     } catch (error: any) {
