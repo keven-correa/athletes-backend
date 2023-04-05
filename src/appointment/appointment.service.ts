@@ -90,6 +90,8 @@ export class AppointmentService {
     if (!validate) throw new NotFoundException();
     const appointment = await this.appointmentRepository
       .createQueryBuilder('appointment')
+      .leftJoin('appointment.diagnostic_classification', 'dx')
+      .addSelect(['dx.id', 'dx.name'])
       .leftJoin('appointment.athlete', 'athlete')
       .addSelect(['athlete.id', 'athlete.name', 'athlete.lastName'])
       .leftJoin('athlete.discipline', 'discipline')
@@ -131,6 +133,8 @@ export class AppointmentService {
       .createQueryBuilder('appointments')
       // .leftJoin('appointments.assigned_to', 'assigned')
       // .addSelect(['assigned.firstName', 'assigned.lastName', 'assigned.role'])
+      .leftJoin('appointment.diagnostic_classification', 'dx')
+      .addSelect(['dx.id', 'dx.name'])
       .leftJoin('appointments.created_by', 'created')
       .addSelect(['created.firstName', 'created.lastName', 'created.role'])
       .where('appointments.athleteId =:id', { id: validateAthlete.id })
