@@ -28,7 +28,7 @@ export class CreateAppointmentDto {
   @ApiProperty()
   athlete: number;
 
-  // @IsInt()
-  // @ApiProperty()
-  // assigned_to: number;
+  @IsInt()
+  @ApiProperty()
+  diagnostic_classification: number;
 }

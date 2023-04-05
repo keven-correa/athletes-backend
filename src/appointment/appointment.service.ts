@@ -14,6 +14,7 @@ import { UpdateAppointmentDto } from './dto/update-appointment.dto';
 import { Appointment } from './entities/appointment.entity';
 import { AthletesService } from '../athletes/athletes.service';
 import { User } from '../auth/entities/user.entity';
+import { DiagnosticsService } from '../diagnostics/diagnostics.service';
 
 @Injectable()
 export class AppointmentService {
@@ -25,19 +26,22 @@ export class AppointmentService {
     private readonly authService: AuthService,
     @Inject(AthletesService)
     private readonly athleteService: AthletesService,
+    @Inject(DiagnosticsService)
+    private readonly diagnosticService: DiagnosticsService
   ) {}
 
   async create(createAppointmentDto: CreateAppointmentDto, createdBy: User) {
     const athlete = await this.athleteService.findOne(
       createAppointmentDto.athlete,
     );
-
+    
     if (!athlete) throw new NotFoundException();
-
+    const dx = await this.diagnosticService.findOne(createAppointmentDto.diagnostic_classification);
     const appointment = this.appointmentRepository.create({
       ...createAppointmentDto,
       created_by: createdBy,
       athlete: athlete,
+      diagnostic_classification: dx
     });
     if (!appointment.athlete) throw new BadRequestException();
 
@@ -49,7 +53,8 @@ export class AppointmentService {
     try {
       return await this.appointmentRepository
         .createQueryBuilder('appointment')
-        // .addSelect(['appointment.id', 'appointment.reason', 'appointment.dignostic', 'appointment.notes', 'appointment.priority'])
+        .leftJoin('appointment.diagnostic_classification', 'dx')
+        .addSelect(['dx.id', 'dx.name'])
         .leftJoin('appointment.athlete', 'athlete',)
         .addSelect(['athlete.id', 'athlete.name', 'athlete.lastName'])
         .leftJoin('athlete.discipline', 'discipline')
@@ -67,6 +72,17 @@ export class AppointmentService {
     } catch (error: any) {
       this.logger.error(error);
     }
+  }
+
+  async getConsultationsByDiagnosis(diagnosis: string): Promise<{ diagnosis: string; count: number }[]> {
+    const consultationsByDiagnosis = await this.appointmentRepository.createQueryBuilder('consultation')
+      .select('consultation.diagnosis', 'diagnosis')
+      .addSelect('COUNT(*)', 'count')
+      .where('consultation.diagnosis = :diagnosis', { diagnosis })
+      .groupBy('consultation.diagnosis')
+      .getRawMany();
+
+    return consultationsByDiagnosis;
   }
 
   async findOne(id: number) {

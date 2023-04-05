@@ -2,6 +2,7 @@ import { Athlete } from '../../athletes/entities/athlete.entity';
 import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { User } from '../../auth/entities/user.entity';
 import { PriorityLevel } from '../enums/enum.appointment';
+import { Diagnostic } from '../../diagnostics/entities/diagnostic.entity';
 
 @Entity('Appointments')
 export class Appointment {
@@ -26,6 +27,9 @@ export class Appointment {
   // @JoinColumn({name: 'assigned_to'})
   // @ManyToOne(() => User, (assigned) => assigned.assing_appointment)
   // assigned_to: User;
+
+  @ManyToOne(() => Diagnostic, (diagnostic) => diagnostic.appointments)
+  diagnostic_classification: Diagnostic;
 
   @JoinColumn({ name: 'created_by' }) 
   @ManyToOne(() => User, (user) => user.appointments)

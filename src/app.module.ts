@@ -10,6 +10,7 @@ import { EvaluationModule } from './evaluation/evaluation.module';
 import { DisciplineModule } from './discipline/discipline.module';
 import { DisciplineService } from './discipline/discipline.service';
 import { ShiftsModule } from './shifts/shifts.module';
+import { DiagnosticsModule } from './diagnostics/diagnostics.module';
 
 @Module({
   imports: [
@@ -33,6 +34,7 @@ import { ShiftsModule } from './shifts/shifts.module';
     EvaluationModule,
     DisciplineModule,
     ShiftsModule,
+    DiagnosticsModule,
   ],
   controllers: [],
   providers: [DisciplineService],
