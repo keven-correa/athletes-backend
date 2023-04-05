@@ -9,6 +9,6 @@ export class CreateDisciplineDto {
 
     @ApiProperty()
     @IsNotEmpty()
-    @MaxLength(200)
+    @MaxLength(350)
     description?: string;
 }

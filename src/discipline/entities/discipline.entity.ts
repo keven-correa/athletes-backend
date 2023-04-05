@@ -19,7 +19,7 @@ export class Discipline {
   @Column('varchar')
   name: string;
 
-  @Column('varchar')
+  @Column({ type: 'varchar', length: 350, nullable: true, unique: true })
   description?: string;
 
   // @ManyToOne(() => Athlete, (athlete) => athlete.discipline)
