@@ -131,9 +131,7 @@ export class AppointmentService {
 
     const appointments = await this.appointmentRepository
       .createQueryBuilder('appointments')
-      // .leftJoin('appointments.assigned_to', 'assigned')
-      // .addSelect(['assigned.firstName', 'assigned.lastName', 'assigned.role'])
-      .leftJoin('appointment.diagnostic_classification', 'dx')
+      .leftJoin('appointments.diagnostic_classification', 'dx')
       .addSelect(['dx.id', 'dx.name'])
       .leftJoin('appointments.created_by', 'created')
       .addSelect(['created.firstName', 'created.lastName', 'created.role'])
