@@ -115,12 +115,14 @@ export class AppointmentService {
     const athlete = await this.athleteService.findOne(
       updateAppointmentDto.athlete,
     );
+    const dx = await this.diagnosticService.findOne(updateAppointmentDto.diagnostic_classification);
 
     const appointment = await this.appointmentRepository.preload({
       id: id,
       ...updateAppointmentDto,
       // assigned_to: doctor,
       athlete: athlete,
+      diagnostic_classification: dx
     });
     this.appointmentRepository.save(appointment);
     return appointment;

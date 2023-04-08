@@ -23,6 +23,18 @@ export class Therapy {
   })
   created_at: Date;
 
+  @Column({
+    type: 'timestamptz',
+    default: () => `timezone('America/Santo_Domingo', now())`,
+  })
+  start_time: Date;
+
+  @Column({
+    nullable: true,
+    type: 'timestamptz',
+  })
+  end_time: Date;
+
   @CreateDateColumn({
     type: 'timestamp',
     default: () => 'CURRENT_TIMESTAMP(6)',
@@ -32,12 +44,9 @@ export class Therapy {
   @Column({ nullable: true, type: 'text' })
   remarks: string;
 
-  @Column({ nullable: false, type: 'timestamptz' })
-  schedulingDate: Date;
-
   @Column({ type: 'enum', enum: Status, default: Status.Active })
   status: Status;
-  
+
   @ManyToOne(() => User, (therapist) => therapist.therapies)
   therapist: User;
 
@@ -45,7 +54,7 @@ export class Therapy {
   athlete: Athlete;
 
   @ManyToOne(() => Evaluation, (evaluation) => evaluation.therapies)
-  evaluation: Evaluation
+  evaluation: Evaluation;
 
   @JoinColumn({ name: 'created_by' })
   @ManyToOne(() => User, (user) => user.therapies)

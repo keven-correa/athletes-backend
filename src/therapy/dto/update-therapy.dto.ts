@@ -14,9 +14,9 @@ export class UpdateTherapyDto {
   @MaxLength(255)
   remarks?: string;
 
-  @IsNotEmpty()
+  @IsOptional()
   @ApiProperty()
-  schedulingDate: Date;
+  end_time: Date;
 
   @ApiProperty()
   @IsNotEmpty()

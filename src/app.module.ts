@@ -24,8 +24,10 @@ import { DiagnosticsModule } from './diagnostics/diagnostics.module';
       password: process.env.DB_PASSWORD,
       autoLoadEntities: true,
       synchronize: true,
+      
       // logging: true
     }),
+    
     AthleteModule,
     CommonModule,
     AuthModule,

@@ -30,6 +30,6 @@ export class Shift {
   remarks: string;
 
 
-  @CreateDateColumn()
+  @CreateDateColumn({ type: 'timestamptz', default: () => `timezone('America/Santo_Domingo', now())`   })
   createdAt: Date;
 }

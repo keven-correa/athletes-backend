@@ -31,4 +31,8 @@ export class CreateAppointmentDto {
   @IsInt()
   @ApiProperty()
   diagnostic_classification: number;
+
+  @IsOptional()
+  @ApiProperty()
+  end_time: Date;
 }

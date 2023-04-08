@@ -19,23 +19,17 @@ export class Discipline {
   @Column('varchar')
   name: string;
 
-  @Column({ type: 'varchar', length: 350, nullable: true, unique: true })
+  @Column({ type: 'varchar', length: 550, nullable: true, unique: true })
   description?: string;
 
   // @ManyToOne(() => Athlete, (athlete) => athlete.discipline)
   @OneToMany(() => Athlete, (disciplineAthlete) => disciplineAthlete.discipline)
   athletes: Athlete[];
 
-  @CreateDateColumn({
-    type: 'timestamp',
-    default: () => 'CURRENT_TIMESTAMP(6)',
-  })
+  @CreateDateColumn({ type: 'timestamptz', default: () => `timezone('America/Santo_Domingo', now())`   })
   created_at: Date;
 
-  @CreateDateColumn({
-    type: 'timestamp',
-    default: () => 'CURRENT_TIMESTAMP(6)',
-  })
+  @CreateDateColumn({ type: 'timestamptz', default: () => `timezone('America/Santo_Domingo', now())`   })
   updated_at: Date;
 
   @JoinColumn({ name: 'created_by' })

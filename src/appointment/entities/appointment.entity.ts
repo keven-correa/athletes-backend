@@ -31,6 +31,18 @@ export class Appointment {
   @ManyToOne(() => Diagnostic, (diagnostic) => diagnostic.appointments)
   diagnostic_classification: Diagnostic;
 
+  @Column({
+    type: 'timestamptz',
+    default: () => `timezone('America/Santo_Domingo', now())`,
+  })
+  start_time: Date;
+
+  @Column({
+    nullable: true,
+    type: 'timestamptz',
+  })
+  end_time: Date;
+
   @JoinColumn({ name: 'created_by' }) 
   @ManyToOne(() => User, (user) => user.appointments)
   created_by: User;

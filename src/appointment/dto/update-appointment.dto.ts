@@ -27,4 +27,8 @@ export class UpdateAppointmentDto  {
   @IsInt()
   @ApiProperty()
   athlete: number;
+
+  @IsInt()
+  @ApiProperty()
+  diagnostic_classification: number;
 }
