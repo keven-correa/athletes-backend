@@ -46,7 +46,24 @@ export class EvaluationService {
   }
 
   async findAll() {
-    return await this.evaluationRepository.find({order: {id: 'ASC'}});
+    const evaluations = this.evaluationRepository
+      .createQueryBuilder('evaluation')
+      .leftJoin('evaluation.athlete', 'athlete')
+      .addSelect(['athlete.id', 'athlete.name', 'athlete.lastName'])
+      .leftJoin('athlete.discipline', 'discipline')
+      .addSelect(['discipline.id', 'discipline.name'])
+      .leftJoin('evaluation.created_by', 'created')
+      .addSelect([
+        'created.id',
+        'created.firstName',
+        'created.lastName',
+        'created.role',
+      ])
+      .orderBy('evaluation.id', 'DESC')
+      .cache(4500)
+      .getMany();
+
+    return evaluations;
   }
 
   async findOne(id: number) {

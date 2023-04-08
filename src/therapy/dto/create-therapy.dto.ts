@@ -9,7 +9,7 @@ export class CreateTherapyDto {
 
   @IsOptional()
   @ApiProperty()
-  end_time: Date;
+  start_time: Date;
 
   @ApiProperty()
   @IsNotEmpty()

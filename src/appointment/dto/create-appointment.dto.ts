@@ -34,5 +34,5 @@ export class CreateAppointmentDto {
 
   @IsOptional()
   @ApiProperty()
-  end_time: Date;
+  start_time: Date;
 }

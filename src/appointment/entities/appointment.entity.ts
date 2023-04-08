@@ -33,13 +33,13 @@ export class Appointment {
 
   @Column({
     type: 'timestamptz',
-    default: () => `timezone('America/Santo_Domingo', now())`,
   })
   start_time: Date;
 
   @Column({
-    nullable: true,
     type: 'timestamptz',
+    nullable: true,
+    default: () => `timezone('America/Santo_Domingo', now())`,
   })
   end_time: Date;
 
