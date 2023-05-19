@@ -47,17 +47,17 @@ export class TherapyService {
       .createQueryBuilder('therapy')
       .leftJoin('therapy.evaluation', 'evaluation')
       .addSelect('evaluation.id')
-      .leftJoin('therapy.athlete', 'athlete',)
-        .addSelect(['athlete.id', 'athlete.name', 'athlete.lastName'])
-        .leftJoin('athlete.discipline', 'discipline')
-        .addSelect(['discipline.id', 'discipline.name'])
-        .leftJoin('therapy.created_by', 'created')
-        .addSelect([
-          'created.id',
-          'created.firstName',
-          'created.lastName',
-          'created.role',
-        ])
+      .leftJoin('therapy.athlete', 'athlete')
+      .addSelect(['athlete.id', 'athlete.name', 'athlete.lastName'])
+      .leftJoin('athlete.discipline', 'discipline')
+      .addSelect(['discipline.id', 'discipline.name'])
+      .leftJoin('therapy.created_by', 'created')
+      .addSelect([
+        'created.id',
+        'created.firstName',
+        'created.lastName',
+        'created.role',
+      ])
       .getMany();
     return therapies;
   }
